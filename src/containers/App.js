@@ -1,56 +1,34 @@
-import React from "react";
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@material-ui/core";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Container } from "@material-ui/core";
 
-import { user } from "assets/mock-user";
+import ShowsTable from "components/showsTable/ShowsTable";
 
-function App() {
-  const { shows: items } = user;
+import { user } from "assets/mock-user.js";
+import * as actions from "store/shows";
 
-  const shows = items.map((show) => {
-    return (
-      <TableRow>
-        <TableCell>{show.title}</TableCell>
-        <TableCell>{show.current.season}</TableCell>
-        <TableCell>{show.current.episode}</TableCell>
-        <TableCell>{show.status}</TableCell>
-        <TableCell>{show.tags}</TableCell>
-        <TableCell>{show.comments}</TableCell>
-      </TableRow>
-    );
-  });
+export default function App() {
+  const dispatch = useDispatch();
+  const shows = useSelector((state) => state.shows);
 
+  useEffect(() => {
+    const addShow = (show) => dispatch(actions.addShow(show));
+
+    user.shows.forEach((show) => {
+      const i = shows.findIndex((el) => el.id === show.id);
+
+      if (i === -1) {
+        console.log(show);
+        addShow(show);
+      }
+    });
+  }, []);
+  
   return (
     <div className='App'>
-      <main>
-        <TableContainer component={Paper}>
-          <Table>
-            <caption>All Shows</caption>
-
-            <TableHead>
-              <TableRow>
-                <TableCell>title</TableCell>
-                <TableCell>season</TableCell>
-                <TableCell>episode</TableCell>
-                <TableCell>status</TableCell>
-                <TableCell>tags</TableCell>
-                <TableCell>note</TableCell>
-              </TableRow>
-            </TableHead>
-
-            <TableBody>{shows}</TableBody>
-          </Table>
-        </TableContainer>
-      </main>
+      <Container component='main'>
+        <ShowsTable shows={shows} />
+      </Container>
     </div>
   );
 }
-
-export default App;
