@@ -1,4 +1,5 @@
 import {
+  Container,
   Paper,
   Table,
   TableBody,
@@ -6,41 +7,54 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-} from '@material-ui/core';
+  Fab,
+} from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
+
+import useStyles from "./ShowsTableStyles";
 
 export default function ShowsTable(props) {
+  const classes = useStyles();
   const { shows } = props;
 
   return (
-    <TableContainer component={Paper}>
-      <Table>
-        <caption>All Shows</caption>
+    <>
+      <Container className={classes.root} component='main'>
+        <TableContainer component={Paper}>
+          <Table>
+            <caption>All Shows</caption>
 
-        <TableHead>
-          <TableRow>
-            <TableCell>title</TableCell>
-            <TableCell>season</TableCell>
-            <TableCell>episode</TableCell>
-            <TableCell>status</TableCell>
-            <TableCell>tags</TableCell>
-            <TableCell>note</TableCell>
-          </TableRow>
-        </TableHead>
-
-        <TableBody>
-          {shows &&
-            shows.map((show) => (
-              <TableRow key={show.id}>
-                <TableCell>{show.title}</TableCell>
-                <TableCell>{show.current.season}</TableCell>
-                <TableCell>{show.current.episode}</TableCell>
-                <TableCell>{show.status}</TableCell>
-                <TableCell>{show.tags}</TableCell>
-                <TableCell>{show.comments}</TableCell>
+            <TableHead>
+              <TableRow className={classes.headerRow}>
+                <TableCell>Title</TableCell>
+                <TableCell>Season</TableCell>
+                <TableCell>Episode</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Tags</TableCell>
+                <TableCell>Note</TableCell>
               </TableRow>
-            ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+            </TableHead>
+
+            <TableBody>
+              {shows &&
+                shows.map((show) => (
+                  <TableRow key={show.id}>
+                    <TableCell>{show.title}</TableCell>
+                    <TableCell>{show.current.season}</TableCell>
+                    <TableCell>{show.current.episode}</TableCell>
+                    <TableCell>{show.status}</TableCell>
+                    <TableCell>{show.tags}</TableCell>
+                    <TableCell>{show.comments}</TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Container>
+
+      <Fab className={classes.fab} color='secondary'>
+        <AddIcon />
+      </Fab>
+    </>
   );
 }

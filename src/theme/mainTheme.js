@@ -6,9 +6,9 @@ const mainTheme = createMuiTheme({
       main: '#2ce198',
     },
     secondary: {
-      main: '#e9e891',
-    }
-    
+      main: '#ff9800',
+      light: '#e9e891',
+    } 
   },
 });
 

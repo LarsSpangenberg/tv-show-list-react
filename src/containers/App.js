@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Container } from "@material-ui/core";
 
 import ShowsTable from "components/showsTable/ShowsTable";
 
@@ -23,12 +22,10 @@ export default function App() {
       }
     });
   }, []);
-  
+
   return (
     <div className='App'>
-      <Container component='main'>
-        <ShowsTable shows={shows} />
-      </Container>
+      <ShowsTable shows={shows} />
     </div>
   );
 }
