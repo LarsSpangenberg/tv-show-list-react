@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import ShowsTable from "components/showsTable/ShowsTable";
+import ShowsTable from "components/showsList/ShowsList";
 
 import { user } from "assets/mock-user.js";
-import * as actions from "store/shows";
+import * as actions from "store/ShowsSlice";
 
 export default function App() {
   const dispatch = useDispatch();

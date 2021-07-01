@@ -11,6 +11,11 @@ export default makeStyles(theme => ({
       color: theme.palette.common.white,
     }
   },
+  listItem: {
+    '&:hover': {
+      cursor: 'pointer'
+    },
+  },
   fab: {
     position: 'absolute',
     right: '5%',

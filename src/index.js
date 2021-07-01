@@ -1,14 +1,14 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 
-import App from "containers/App";
-import store from "store/store";
+import App from 'containers/App';
+import store from 'store/store';
 
-import { ThemeProvider } from "@material-ui/core/styles";
-import { CssBaseline } from "@material-ui/core";
-import theme from "theme/mainTheme";
-import "@fontsource/roboto";
+import { ThemeProvider } from '@material-ui/core/styles';
+import { CssBaseline } from '@material-ui/core';
+import theme from 'theme/mainTheme';
+import '@fontsource/roboto';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -20,5 +20,5 @@ ReactDOM.render(
       </CssBaseline>
     </ThemeProvider>
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById('root')
 );

@@ -10,6 +10,9 @@ const mainTheme = createMuiTheme({
       light: '#e9e891',
     } 
   },
+  shape: {
+    borderRadius: 8,
+  }
 });
 
 export default mainTheme;
