@@ -13,8 +13,9 @@ import {
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
-import useStyles from './ShowDetailsModalStyles';
 import ShowDetailsForm from './ShowDetailsForm';
+import useStyles from './ShowDetailsModalStyles';
+
 import { updateSelection, resetSelection } from 'store/ShowDetailsSlice';
 import * as actions from 'store/ShowsSlice';
 
