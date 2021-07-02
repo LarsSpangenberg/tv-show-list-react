@@ -5,6 +5,10 @@ export default makeStyles(theme => ({
     marginTop: '50vh',
     transform: 'translate(0, -50%)',
   },
+  toolbar: {
+    backgroundColor: theme.palette.primary.main,
+    justifyContent: 'space-between',
+  },
   headerRow: {
     backgroundColor: theme.palette.primary.dark,
     '& th': {

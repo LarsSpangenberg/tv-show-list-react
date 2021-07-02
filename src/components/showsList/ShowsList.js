@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   Container,
   Paper,
+  Toolbar,
+  Tooltip,
   Table,
   TableBody,
   TableCell,
@@ -11,12 +13,15 @@ import {
   TableHead,
   TableRow,
   Fab,
+  IconButton,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import useStyles from './ShowsListStyles';
 import ShowDetailsModal from 'components/showDetails/ShowDetailsModal';
 import * as actions from 'store/ShowDetailsSlice';
+import { Typography } from '@material-ui/core';
 
 export default function ShowsTable(props) {
   const classes = useStyles();
@@ -56,11 +61,19 @@ export default function ShowsTable(props) {
 
   return (
     <>
-      <Container className={classes.root} component='main'>
+      <Container className={classes.root}>
         <TableContainer component={Paper}>
-          <Table>
-            <caption>All Shows</caption>
+          <Toolbar className={classes.toolbar}>
+            <Typography>All Shows</Typography>
 
+            <Tooltip title='Delete'>
+              <IconButton>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          </Toolbar>
+
+          <Table>
             <TableHead>
               <TableRow className={classes.headerRow}>
                 <TableCell>Title</TableCell>
