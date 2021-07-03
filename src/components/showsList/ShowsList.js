@@ -5,11 +5,13 @@ import {
   Container,
   Paper,
   Toolbar,
+  Typography,
   Tooltip,
+  Checkbox,
   Table,
+  TableContainer,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
   TableRow,
   Fab,
@@ -21,16 +23,16 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import useStyles from './ShowsListStyles';
 import ShowDetailsModal from 'components/showDetails/ShowDetailsModal';
 import * as actions from 'store/ShowDetailsSlice';
-import { Typography } from '@material-ui/core';
 
 export default function ShowsTable(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
 
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [selectedShows, setSelectedShows] = useState([]);
+  const [numSelected, setNumSelected] = useState(0);
 
   const shows = useSelector((state) => state.shows);
-  console.log(shows);
   const createNewShow = () => dispatch(actions.createNewShow());
   const selectShow = (show) => dispatch(actions.selectShow(show));
 
@@ -42,6 +44,40 @@ export default function ShowsTable(props) {
   function handleFabClick() {
     createNewShow();
     setIsDetailsOpen(true);
+  }
+
+  function isAllSelected() {
+    return shows.length > 0 && numSelected === shows.length;
+  }
+
+  function isAnySelected() {
+    return numSelected > 0 && numSelected < shows.length;
+  }
+
+  function handleSelectAllClick() {
+    if (numSelected < shows.length) {
+      const newSelectedShows = [];
+      for (let i = 0; i < shows.length; i++) {
+        newSelectedShows[i] = true;
+      }
+
+      setSelectedShows(newSelectedShows);
+      setNumSelected(newSelectedShows.length);
+    } else if (isAllSelected()) {
+      setSelectedShows([]);
+      setNumSelected(0);
+    }
+  }
+
+  function handleItemCheckboxChange(i, e) {
+    if (e.target.checked) setNumSelected((prevState) => ++prevState);
+    else setNumSelected((prevState) => --prevState);
+
+    setSelectedShows((prevState) => {
+      const newState = [...prevState];
+      newState[i] = e.target.checked;
+      return newState;
+    });
   }
 
   function formatTags(tagArray) {
@@ -76,6 +112,13 @@ export default function ShowsTable(props) {
           <Table>
             <TableHead>
               <TableRow className={classes.headerRow}>
+                <TableCell padding='checkbox'>
+                  <Checkbox
+                    indeterminate={isAnySelected()}
+                    checked={isAllSelected()}
+                    onClick={handleSelectAllClick}
+                  />
+                </TableCell>
                 <TableCell>Title</TableCell>
                 <TableCell>Season</TableCell>
                 <TableCell>Episode</TableCell>
@@ -87,18 +130,38 @@ export default function ShowsTable(props) {
 
             <TableBody>
               {shows &&
-                shows.map((show) => (
-                  <TableRow
-                    key={show.id}
-                    className={classes.listItem}
-                    onClick={handleShowClick.bind(this, show)}
-                  >
-                    <TableCell>{show.title}</TableCell>
-                    <TableCell>{show.season}</TableCell>
-                    <TableCell>{show.episode}</TableCell>
-                    <TableCell>{show.status}</TableCell>
-                    <TableCell>{formatTags(show.tags)}</TableCell>
-                    <TableCell>{show.note}</TableCell>
+                shows.map((show, i) => (
+                  <TableRow key={show.id} className={classes.listItem}>
+                    <TableCell padding='checkbox'>
+                      <Checkbox
+                        checked={selectedShows[i] || false}
+                        onChange={handleItemCheckboxChange.bind(this, i)}
+                      />
+                    </TableCell>
+
+                    <TableCell onClick={handleShowClick.bind(this, show)}>
+                      {show.title}
+                    </TableCell>
+
+                    <TableCell onClick={handleShowClick.bind(this, show)}>
+                      {show.season}
+                    </TableCell>
+
+                    <TableCell onClick={handleShowClick.bind(this, show)}>
+                      {show.episode}
+                    </TableCell>
+
+                    <TableCell onClick={handleShowClick.bind(this, show)}>
+                      {show.status}
+                    </TableCell>
+
+                    <TableCell onClick={handleShowClick.bind(this, show)}>
+                      {formatTags(show.tags)}
+                    </TableCell>
+
+                    <TableCell onClick={handleShowClick.bind(this, show)}>
+                      {show.note}
+                    </TableCell>
                   </TableRow>
                 ))}
             </TableBody>
