@@ -6,12 +6,18 @@ import useStyles from './ShowsListItemStyles';
 export default function ShowsListItem(props) {
   const classes = useStyles();
 
-  const { show, isChecked, selectShow, openDetails, handleCheck } = props;
+  const { i, show, isChecked, selectShow, openDetails, handleCheck } = props;
   const { id, title, season, episode, status, note, tags } = show;
 
   function handleShowClick() {
     selectShow(show);
     openDetails();
+  }
+
+  function handleCheckClick(e) {
+    console.log(i);
+    console.log(e.target.checked);
+    handleCheck({ i, isChecked: e.target.checked });
   }
 
   function formattedTags() {
@@ -32,7 +38,7 @@ export default function ShowsListItem(props) {
   return (
     <TableRow key={id} className={classes.root}>
       <TableCell padding='checkbox'>
-        <Checkbox checked={isChecked} onChange={handleCheck} />
+        <Checkbox checked={isChecked} onChange={handleCheckClick} />
       </TableCell>
 
       <TableCell onClick={handleShowClick}>{title}</TableCell>

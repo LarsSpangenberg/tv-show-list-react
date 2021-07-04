@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import showsReducer from 'store/ShowsSlice';
-import showDetailsReducer from 'store/ShowDetailsSlice';
+import showsReducer from './ShowsSlice';
+import showDetailsReducer from './ShowDetailsSlice';
+import checkedListItemsReducer from './CheckedListItemsSlice';
 
 export default configureStore({
   reducer: {
     shows: showsReducer,
     showDetails: showDetailsReducer,
+    checkedListItems: checkedListItemsReducer,
   },
 });

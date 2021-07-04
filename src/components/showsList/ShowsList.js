@@ -16,19 +16,24 @@ import ShowsListToolbar from 'components/showsList/showsListToolbar/ShowsListToo
 import ShowsListHead from 'components/showsList/showsListHead/ShowsListHead';
 import ShowsListItem from 'components/showsList/showsListItem/ShowsListItem';
 import ShowDetailsModal from 'components/showDetails/ShowDetailsModal';
-import * as actions from 'store/ShowDetailsSlice';
+import * as detailsActions from 'store/ShowDetailsSlice';
+import { toggleCheck, toggleCheckAll } from 'store/CheckedListItemsSlice';
 
 export default function ShowsTable(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
 
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const [selectedShows, setSelectedShows] = useState([]);
-  const [numSelected, setNumSelected] = useState(0);
 
   const shows = useSelector((state) => state.shows);
-  const createNewShow = () => dispatch(actions.createNewShow());
-  const selectShow = (show) => dispatch(actions.selectShow(show));
+  const { numChecked: numSelected, checked: selectedShows } = useSelector(
+    (state) => state.checkedListItems
+  );
+
+  const createNewShow = () => dispatch(detailsActions.createNewShow());
+  const selectShow = (show) => dispatch(detailsActions.selectShow(show));
+  const handleItemCheck = (payload) => dispatch(toggleCheck(payload));
+  const handleSelectAll = () => dispatch(toggleCheckAll(shows.length));
 
   function openDetails() {
     setIsDetailsOpen(true);
@@ -42,33 +47,7 @@ export default function ShowsTable(props) {
     createNewShow();
     openDetails();
   }
-
-  function handleSelectAll() {
-    if (numSelected < shows.length) {
-      const newSelectedShows = [];
-      for (let i = 0; i < shows.length; i++) {
-        newSelectedShows[i] = true;
-      }
-
-      setSelectedShows(newSelectedShows);
-      setNumSelected(newSelectedShows.length);
-    } else if (shows.length > 0 && numSelected === shows.length) {
-      setSelectedShows([]);
-      setNumSelected(0);
-    }
-  }
-
-  function handleItemCheck(i, e) {
-    if (e.target.checked) setNumSelected((prevState) => ++prevState);
-    else setNumSelected((prevState) => --prevState);
-
-    setSelectedShows((prevState) => {
-      const newState = [...prevState];
-      newState[i] = e.target.checked;
-      return newState;
-    });
-  }
-
+  
   return (
     <>
       <Container className={classes.root}>
@@ -86,11 +65,12 @@ export default function ShowsTable(props) {
               {shows &&
                 shows.map((show, i) => (
                   <ShowsListItem
+                    i={i}
                     show={show}
                     isChecked={selectedShows[i] || false}
                     selectShow={selectShow}
                     openDetails={openDetails}
-                    handleCheck={handleItemCheck.bind(this, i)}
+                    handleCheck={handleItemCheck}
                   />
                 ))}
             </TableBody>
