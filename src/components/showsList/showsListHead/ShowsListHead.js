@@ -1,6 +1,8 @@
 import React from 'react';
 
 import { TableHead, TableRow, TableCell, Checkbox } from '@material-ui/core';
+import CheckBoxIcon from '@material-ui/icons/CheckBoxOutlined';
+import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
 
 import useStyles from './ShowsListHeadStyles';
 
@@ -22,9 +24,14 @@ export default function ShowsListHead(props) {
       <TableRow className={classes.headerRow}>
         <TableCell padding='checkbox'>
           <Checkbox
+            className={classes.checkboxIcon}
             indeterminate={isAnySelected()}
             checked={isAllSelected()}
             onClick={handleSelectAll}
+            checkedIcon={<CheckBoxIcon className={classes.checkboxIcon} />}
+            indeterminateIcon={<IndeterminateCheckBoxIcon />}
+            
+            // color='default'
           />
         </TableCell>
         <TableCell>Title</TableCell>

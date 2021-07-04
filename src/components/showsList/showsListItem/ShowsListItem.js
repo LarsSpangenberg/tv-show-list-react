@@ -15,8 +15,6 @@ export default function ShowsListItem(props) {
   }
 
   function handleCheckClick(e) {
-    console.log(i);
-    console.log(e.target.checked);
     handleCheck({ i, isChecked: e.target.checked });
   }
 
@@ -38,7 +36,11 @@ export default function ShowsListItem(props) {
   return (
     <TableRow key={id} className={classes.root}>
       <TableCell padding='checkbox'>
-        <Checkbox checked={isChecked} onChange={handleCheckClick} />
+        <Checkbox
+          checked={isChecked}
+          onChange={handleCheckClick}
+          color='default'
+        />
       </TableCell>
 
       <TableCell onClick={handleShowClick}>{title}</TableCell>

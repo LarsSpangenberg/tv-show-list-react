@@ -7,4 +7,7 @@ export default makeStyles((theme) => ({
       color: theme.palette.common.white,
     },
   },
+  checkboxIcon: {
+    color: theme.palette.common.white,
+  }
 }));
