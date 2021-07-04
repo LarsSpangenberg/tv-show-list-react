@@ -8,6 +8,6 @@ export default makeStyles((theme) => ({
     },
   },
   checkboxIcon: {
-    color: theme.palette.common.white,
+    color: theme.palette.secondary.light,
   }
 }));
