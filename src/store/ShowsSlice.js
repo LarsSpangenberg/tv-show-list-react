@@ -14,9 +14,12 @@ export const showsSlice = createSlice({
     deleteShow(state, action) {
       return state.filter(show => show.id !== action.payload);
     },
+    deleteShows(state, action) {
+      return state.filter(show => !action.payload.includes(show.id));
+    },
   },
 });
 
-export const { addShow, updateShow, deleteShow } = showsSlice.actions;
+export const { addShow, updateShow, deleteShow, deleteShows } = showsSlice.actions;
 
 export default showsSlice.reducer;

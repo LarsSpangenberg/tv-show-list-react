@@ -16,8 +16,10 @@ import ShowsListToolbar from 'components/showsList/showsListToolbar/ShowsListToo
 import ShowsListHead from 'components/showsList/showsListHead/ShowsListHead';
 import ShowsListItem from 'components/showsList/showsListItem/ShowsListItem';
 import ShowDetailsModal from 'components/showDetails/ShowDetailsModal';
+
 import * as detailsActions from 'store/ShowDetailsSlice';
-import { toggleCheck, toggleCheckAll } from 'store/CheckedListItemsSlice';
+import { toggleCheck, toggleCheckAll, resetChecked } from 'store/CheckedListItemsSlice';
+import { deleteShows } from 'store/ShowsSlice';
 
 export default function ShowsTable() {
   const classes = useStyles();
@@ -34,6 +36,16 @@ export default function ShowsTable() {
   const selectShow = (show) => dispatch(detailsActions.selectShow(show));
   const handleItemCheck = (payload) => dispatch(toggleCheck(payload));
   const handleSelectAll = () => dispatch(toggleCheckAll(shows.length));
+
+  const handleDelete = () => {
+    const selectedIds = [];
+    selectedShows.forEach((isSelected, i) => {
+      if (isSelected) selectedIds.push(shows[i].id);
+    });
+
+    dispatch(deleteShows(selectedIds));
+    dispatch(resetChecked());
+  };
 
   function openDetails() {
     setIsDetailsOpen(true);
@@ -52,7 +64,10 @@ export default function ShowsTable() {
     <>
       <Container className={classes.root}>
         <TableContainer component={Paper}>
-          <ShowsListToolbar />
+          <ShowsListToolbar
+            numSelected={numSelected}
+            handleDelete={handleDelete}
+          />
 
           <Table>
             <ShowsListHead

@@ -1,11 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const defaultState = {
+  checked: [],
+  numChecked: 0,
+}
+
 export const checkedListItemsSlice = createSlice({
   name: 'checkedListItems',
-  initialState: {
-    checked: [],
-    numChecked: 0,
-  },
+  initialState: defaultState,
   reducers: {
     toggleCheck(state, action) {
       const { i, isChecked } = action.payload;
@@ -22,7 +24,7 @@ export const checkedListItemsSlice = createSlice({
     },
     toggleCheckAll(state, action) {
       const rowCount = action.payload;
-      
+
       if (state.numChecked < rowCount) {
         const checked = [];
         for (let i = 0; i < rowCount; i++) {
@@ -34,15 +36,15 @@ export const checkedListItemsSlice = createSlice({
           numChecked: checked.length,
         };
       } else if (rowCount > 0 && state.numChecked === rowCount) {
-        return {
-          checked: [],
-          numChecked: 0,
-        };
+        return defaultState;
       }
     },
+    resetChecked() {
+      return defaultState
+    }
   },
 });
 
-export const { toggleCheck, toggleCheckAll } = checkedListItemsSlice.actions;
+export const { toggleCheck, toggleCheckAll, resetChecked } = checkedListItemsSlice.actions;
 
 export default checkedListItemsSlice.reducer;
