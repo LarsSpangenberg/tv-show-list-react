@@ -19,7 +19,7 @@ import ShowDetailsModal from 'components/showDetails/ShowDetailsModal';
 import * as detailsActions from 'store/ShowDetailsSlice';
 import { toggleCheck, toggleCheckAll } from 'store/CheckedListItemsSlice';
 
-export default function ShowsTable(props) {
+export default function ShowsTable() {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -47,7 +47,7 @@ export default function ShowsTable(props) {
     createNewShow();
     openDetails();
   }
-  
+
   return (
     <>
       <Container className={classes.root}>
