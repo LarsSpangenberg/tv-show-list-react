@@ -5,7 +5,7 @@ export const user = {
   shows: [
     {
       id: '2o374osdjlwie7r923',
-      title: 'Jessica Jones',
+      title: 'Loki',
       season: 2,
       episode: 13,
       note: 'finished latest episode',
@@ -46,7 +46,7 @@ export const user = {
 
     {
       id: 'asod87f09w83jkrh8s0',
-      title: 'Legion',
+      title: 'The Boys',
       season: 2,
       episode: 10,
       note: 'finished latest episode',
