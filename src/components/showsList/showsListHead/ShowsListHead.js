@@ -30,8 +30,6 @@ export default function ShowsListHead(props) {
             onClick={handleSelectAll}
             checkedIcon={<CheckBoxIcon className={classes.checkboxIcon} />}
             indeterminateIcon={<IndeterminateCheckBoxIcon />}
-            
-            // color='default'
           />
         </TableCell>
         <TableCell>Title</TableCell>
