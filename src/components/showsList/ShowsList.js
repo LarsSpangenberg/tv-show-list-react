@@ -4,23 +4,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   Container,
   Paper,
-  Toolbar,
-  Typography,
-  Tooltip,
-  Checkbox,
   Table,
   TableContainer,
   TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
   Fab,
-  IconButton,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import DeleteIcon from '@material-ui/icons/Delete';
 
 import useStyles from './ShowsListStyles';
+import ShowsListToolbar from 'components/showsList/showsListToolbar/ShowsListToolbar';
+import ShowsListHead from 'components/showsList/showsListHead/ShowsListHead';
+import ShowsListItem from 'components/showsList/showsListItem/ShowsListItem';
 import ShowDetailsModal from 'components/showDetails/ShowDetailsModal';
 import * as actions from 'store/ShowDetailsSlice';
 
@@ -36,25 +30,20 @@ export default function ShowsTable(props) {
   const createNewShow = () => dispatch(actions.createNewShow());
   const selectShow = (show) => dispatch(actions.selectShow(show));
 
-  function handleShowClick(show) {
-    selectShow(show);
+  function openDetails() {
     setIsDetailsOpen(true);
+  }
+
+  function closeDetails() {
+    setIsDetailsOpen(false);
   }
 
   function handleFabClick() {
     createNewShow();
-    setIsDetailsOpen(true);
+    openDetails();
   }
 
-  function isAllSelected() {
-    return shows.length > 0 && numSelected === shows.length;
-  }
-
-  function isAnySelected() {
-    return numSelected > 0 && numSelected < shows.length;
-  }
-
-  function handleSelectAllClick() {
+  function handleSelectAll() {
     if (numSelected < shows.length) {
       const newSelectedShows = [];
       for (let i = 0; i < shows.length; i++) {
@@ -63,13 +52,13 @@ export default function ShowsTable(props) {
 
       setSelectedShows(newSelectedShows);
       setNumSelected(newSelectedShows.length);
-    } else if (isAllSelected()) {
+    } else if (shows.length > 0 && numSelected === shows.length) {
       setSelectedShows([]);
       setNumSelected(0);
     }
   }
 
-  function handleItemCheckboxChange(i, e) {
+  function handleItemCheck(i, e) {
     if (e.target.checked) setNumSelected((prevState) => ++prevState);
     else setNumSelected((prevState) => --prevState);
 
@@ -80,89 +69,29 @@ export default function ShowsTable(props) {
     });
   }
 
-  function formatTags(tagArray) {
-    let tagText = '';
-
-    if (tagArray) {
-      const lastIndex = tagArray.length - 1;
-
-      tagArray.forEach((tag, i) => {
-        tagText += tag;
-        if (i !== lastIndex) tagText += ', ';
-      });
-    }
-
-    return tagText;
-  }
-
   return (
     <>
       <Container className={classes.root}>
         <TableContainer component={Paper}>
-          <Toolbar className={classes.toolbar}>
-            <Typography>All Shows</Typography>
-
-            <Tooltip title='Delete'>
-              <IconButton>
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
-          </Toolbar>
+          <ShowsListToolbar />
 
           <Table>
-            <TableHead>
-              <TableRow className={classes.headerRow}>
-                <TableCell padding='checkbox'>
-                  <Checkbox
-                    indeterminate={isAnySelected()}
-                    checked={isAllSelected()}
-                    onClick={handleSelectAllClick}
-                  />
-                </TableCell>
-                <TableCell>Title</TableCell>
-                <TableCell>Season</TableCell>
-                <TableCell>Episode</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Tags</TableCell>
-                <TableCell>Note</TableCell>
-              </TableRow>
-            </TableHead>
+            <ShowsListHead
+              numSelected={numSelected}
+              rowsCount={shows.length}
+              handleSelectAll={handleSelectAll}
+            />
 
             <TableBody>
               {shows &&
                 shows.map((show, i) => (
-                  <TableRow key={show.id} className={classes.listItem}>
-                    <TableCell padding='checkbox'>
-                      <Checkbox
-                        checked={selectedShows[i] || false}
-                        onChange={handleItemCheckboxChange.bind(this, i)}
-                      />
-                    </TableCell>
-
-                    <TableCell onClick={handleShowClick.bind(this, show)}>
-                      {show.title}
-                    </TableCell>
-
-                    <TableCell onClick={handleShowClick.bind(this, show)}>
-                      {show.season}
-                    </TableCell>
-
-                    <TableCell onClick={handleShowClick.bind(this, show)}>
-                      {show.episode}
-                    </TableCell>
-
-                    <TableCell onClick={handleShowClick.bind(this, show)}>
-                      {show.status}
-                    </TableCell>
-
-                    <TableCell onClick={handleShowClick.bind(this, show)}>
-                      {formatTags(show.tags)}
-                    </TableCell>
-
-                    <TableCell onClick={handleShowClick.bind(this, show)}>
-                      {show.note}
-                    </TableCell>
-                  </TableRow>
+                  <ShowsListItem
+                    show={show}
+                    isChecked={selectedShows[i] || false}
+                    selectShow={selectShow}
+                    openDetails={openDetails}
+                    handleCheck={handleItemCheck.bind(this, i)}
+                  />
                 ))}
             </TableBody>
           </Table>
@@ -173,10 +102,7 @@ export default function ShowsTable(props) {
         <AddIcon />
       </Fab>
 
-      <ShowDetailsModal
-        open={isDetailsOpen}
-        handleClose={setIsDetailsOpen.bind(this, false)}
-      />
+      <ShowDetailsModal open={isDetailsOpen} handleClose={closeDetails} />
     </>
   );
 }
