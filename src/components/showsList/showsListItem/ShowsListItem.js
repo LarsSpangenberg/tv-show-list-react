@@ -1,5 +1,4 @@
 import React from 'react';
-import clsx from 'clsx';
 import { TableRow, TableCell, Checkbox } from '@material-ui/core';
 
 import useStyles from './ShowsListItemStyles';
@@ -40,10 +39,15 @@ export default function ShowsListItem(props) {
     if (tags) {
       const lastIndex = tags.length - 1;
 
-      tags.forEach((tag, i) => {
-        tagText += tag;
-        if (i !== lastIndex) tagText += ', ';
-      });
+      for (let i = 0; i < tags.length; i++) {
+        if (i > 2) {
+          tagText += '...';
+          break;
+        }
+        
+        tagText += tags[i];
+        if (i !== lastIndex && i < 2) tagText += ', ';
+      };
     }
 
     return tagText;
