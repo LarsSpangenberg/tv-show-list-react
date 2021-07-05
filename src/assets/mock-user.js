@@ -10,7 +10,7 @@ export const user = {
       episode: 13,
       note: 'finished latest episode',
       status: 'completed',
-      tags: ['Marvel', 'Netflix', 'Favorites'],
+      tags: ['Marvel', 'Disney+', 'Favorites'],
       data: {
         availableSeasons: 2,
         thumbnail: 'url',
@@ -21,7 +21,7 @@ export const user = {
 
     {
       id: 'lkasjd9f702934osdafu09',
-      title: 'Gotham',
+      title: 'The Falcon and The Winter Soldier',
       season: 4,
       episode: 22,
       note: 'finished latest episode',
