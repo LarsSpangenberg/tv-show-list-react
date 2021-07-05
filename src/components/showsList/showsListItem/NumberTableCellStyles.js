@@ -6,11 +6,6 @@ export default makeStyles((theme) => ({
       opacity: 1,
     },
   },
-  flexContainer: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
   button: {
     opacity: 0,
     transition: 'opacity .3s ease-in-out',

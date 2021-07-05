@@ -20,7 +20,7 @@ export default function NumberTableCell(props) {
       <Box
         name={name}
         width={100}
-        display='flex'
+        display='inline-flex'
         justifyContent='space-between'
         alignItems='center'
       >
