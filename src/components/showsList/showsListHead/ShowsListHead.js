@@ -32,12 +32,18 @@ export default function ShowsListHead(props) {
             indeterminateIcon={<IndeterminateCheckBoxIcon />}
           />
         </TableCell>
+
         <TableCell>Title</TableCell>
-        <TableCell>Season</TableCell>
-        <TableCell>Episode</TableCell>
-        <TableCell>Status</TableCell>
-        <TableCell>Tags</TableCell>
-        <TableCell>Note</TableCell>
+
+        <TableCell align='center'>Season</TableCell>
+
+        <TableCell align='center'>Episode</TableCell>
+
+        <TableCell align='center'>Status</TableCell>
+
+        <TableCell align='center'>Tags</TableCell>
+
+        <TableCell align='center'>Note</TableCell>
       </TableRow>
     </TableHead>
   );

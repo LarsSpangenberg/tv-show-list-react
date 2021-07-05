@@ -1,9 +1,15 @@
 import { makeStyles } from '@material-ui/core';
 
-export default makeStyles(theme => ({
+export default makeStyles((theme) => ({
   root: {
     '&:hover': {
-      cursor: 'pointer'
+      cursor: 'pointer',
     },
+  },
+  textCenter: {
+    textAlign: 'center',
+  },
+  numberCell: {
+    textAlign: 'center',
   },
 }));

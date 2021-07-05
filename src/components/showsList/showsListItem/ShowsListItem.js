@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 import { TableRow, TableCell, Checkbox } from '@material-ui/core';
 
 import useStyles from './ShowsListItemStyles';
@@ -45,15 +46,15 @@ export default function ShowsListItem(props) {
 
       <TableCell onClick={handleShowClick}>{title}</TableCell>
 
-      <TableCell onClick={handleShowClick}>{season}</TableCell>
+      <TableCell onClick={handleShowClick} align='center'>{season}</TableCell>
 
-      <TableCell onClick={handleShowClick}>{episode}</TableCell>
+      <TableCell onClick={handleShowClick} align='center'>{episode}</TableCell>
 
-      <TableCell onClick={handleShowClick}>{status}</TableCell>
+      <TableCell onClick={handleShowClick} align='center'>{status}</TableCell>
 
-      <TableCell onClick={handleShowClick}>{formattedTags()}</TableCell>
+      <TableCell onClick={handleShowClick} align='center'>{formattedTags()}</TableCell>
 
-      <TableCell onClick={handleShowClick}>{note}</TableCell>
+      <TableCell onClick={handleShowClick} align='center'>{note}</TableCell>
     </TableRow>
   );
 }
