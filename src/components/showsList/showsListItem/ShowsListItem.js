@@ -20,8 +20,9 @@ export default function ShowsListItem(props) {
 
   const { id, title, season, episode, status, note, tags } = show;
 
-  function handleShowClick() {
-    selectShow(show);
+  function handleShowClick(e) {
+    const focusField = e.target.getAttribute('name');
+    selectShow({ ...show, focusField });
     openDetails();
   }
 
@@ -58,7 +59,9 @@ export default function ShowsListItem(props) {
         />
       </TableCell>
 
-      <TableCell onClick={handleShowClick}>{title}</TableCell>
+      <TableCell name='title' onClick={handleShowClick}>
+        {title}
+      </TableCell>
 
       <NumberTableCell
         name='season'
@@ -76,15 +79,15 @@ export default function ShowsListItem(props) {
         {episode}
       </NumberTableCell>
 
-      <TableCell onClick={handleShowClick} align='center'>
+      <TableCell name='status' onClick={handleShowClick} align='center'>
         {status}
       </TableCell>
 
-      <TableCell onClick={handleShowClick} align='center'>
+      <TableCell name='tags' onClick={handleShowClick} align='center'>
         {formattedTags()}
       </TableCell>
 
-      <TableCell onClick={handleShowClick} align='center'>
+      <TableCell name='note' onClick={handleShowClick} align='center'>
         {note}
       </TableCell>
     </TableRow>

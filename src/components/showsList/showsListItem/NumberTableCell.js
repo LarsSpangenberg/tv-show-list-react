@@ -16,8 +16,9 @@ export default function NumberTableCell(props) {
   }
 
   return (
-    <TableCell className={classes.root} align='center' {...attr}>
+    <TableCell name={name} className={classes.root} align='center' {...attr}>
       <Box
+        name={name}
         width={100}
         display='flex'
         justifyContent='space-between'

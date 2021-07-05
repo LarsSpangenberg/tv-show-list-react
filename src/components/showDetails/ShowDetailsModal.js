@@ -24,7 +24,7 @@ export default function ShowDetailsModal(props) {
   const dispatch = useDispatch();
 
   const { open, handleClose } = props;
-  const { isNew, ...showDetails } = useSelector((state) => state.showDetails);
+  const { isNew, focusField, ...showDetails } = useSelector((state) => state.showDetails);
 
   const handleDetailChange = (e) =>
     dispatch(updateSelection({ [e.target.name]: e.target.value }));
@@ -72,6 +72,7 @@ export default function ShowDetailsModal(props) {
       <DialogContent className={classes.content}>
         <ShowDetailsForm
           showDetails={showDetails}
+          focusField={focusField}
           handleChange={handleDetailChange}
         />
       </DialogContent>

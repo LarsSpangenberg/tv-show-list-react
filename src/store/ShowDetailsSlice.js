@@ -7,6 +7,7 @@ const defaultState = {
   status: 'current',
   note: '',
   isNew: true,
+  focusField: 'title',
 };
 
 function randomID() {
@@ -22,6 +23,7 @@ export const showDetailsSlice = createSlice({
         ...defaultState,
         id: randomID(),
         isNew: true,
+        focusField: 'title',
       };
     },
     selectShow(_, action) {

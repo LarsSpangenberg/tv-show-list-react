@@ -1,9 +1,38 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Grid, TextField, MenuItem } from '@material-ui/core';
 
 export default function ShowDetailsForm(props) {
-  const { showDetails, handleChange } = props;
+  const { showDetails, focusField, handleChange } = props;
   const { title, status, season, episode, note } = showDetails;
+
+  const titleInput = useRef();
+  const statusInput = useRef();
+  const seasonInput = useRef();
+  const episodeInput = useRef();
+  const noteInput = useRef();
+
+  useEffect(() => {
+    switch(focusField) {
+      case 'status':
+        setTimeout(() => {
+          statusInput.current.focus();
+        }, 100);
+        break;
+      case 'season':
+        seasonInput.current.focus();
+        break;
+      case 'episode':
+        episodeInput.current.focus();
+        break;
+      case 'note':
+        noteInput.current.focus();
+        break;
+      case 'title':
+      default:
+        titleInput.current.focus();
+        break;
+    }
+  }, [focusField]);
 
   return (
     <form noValidate autoComplete='off'>
@@ -15,6 +44,7 @@ export default function ShowDetailsForm(props) {
             name='title'
             value={title}
             onChange={handleChange}
+            inputRef={titleInput}
             fullWidth
           />
         </Grid>
@@ -27,6 +57,7 @@ export default function ShowDetailsForm(props) {
             name='status'
             value={status}
             onChange={handleChange}
+            inputRef={statusInput}
             fullWidth
           >
             <MenuItem value='current'>Currently Watching</MenuItem>
@@ -45,6 +76,7 @@ export default function ShowDetailsForm(props) {
             name='season'
             value={season}
             onChange={handleChange}
+            inputRef={seasonInput}
             fullWidth
             inputProps={{ min: 0 }}
           />
@@ -58,6 +90,7 @@ export default function ShowDetailsForm(props) {
             name='episode'
             value={episode}
             onChange={handleChange}
+            inputRef={episodeInput}
             fullWidth
             inputProps={{ min: 0 }}
           />
@@ -70,6 +103,7 @@ export default function ShowDetailsForm(props) {
             name='note'
             value={note}
             onChange={handleChange}
+            inputRef={noteInput}
             variant='outlined'
             fullWidth
             multiline
