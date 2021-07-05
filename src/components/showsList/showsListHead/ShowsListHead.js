@@ -10,14 +10,8 @@ export default function ShowsListHead(props) {
   const classes = useStyles();
 
   const { numSelected, rowsCount, handleSelectAll } = props;
-
-  function isAllSelected() {
-    return rowsCount > 0 && numSelected === rowsCount;
-  }
-
-  function isAnySelected() {
-    return numSelected > 0 && numSelected < rowsCount;
-  }
+  const isAllSelected = rowsCount > 0 && numSelected === rowsCount;
+  const isAnySelected = numSelected > 0 && numSelected < rowsCount;
 
   return (
     <TableHead>
@@ -25,8 +19,8 @@ export default function ShowsListHead(props) {
         <TableCell padding='checkbox'>
           <Checkbox
             className={classes.checkboxIcon}
-            indeterminate={isAnySelected()}
-            checked={isAllSelected()}
+            indeterminate={isAnySelected}
+            checked={isAllSelected}
             onClick={handleSelectAll}
             checkedIcon={<CheckBoxIcon className={classes.checkboxIcon} />}
             indeterminateIcon={<IndeterminateCheckBoxIcon />}
