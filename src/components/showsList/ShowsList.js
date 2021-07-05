@@ -19,7 +19,7 @@ import ShowDetailsModal from 'components/showDetails/ShowDetailsModal';
 
 import * as detailsActions from 'store/ShowDetailsSlice';
 import { toggleCheck, toggleCheckAll, resetChecked } from 'store/CheckedListItemsSlice';
-import { deleteShows } from 'store/ShowsSlice';
+import { updateSeasonOrEpisode, deleteShows } from 'store/ShowsSlice';
 
 export default function ShowsTable() {
   const classes = useStyles();
@@ -33,11 +33,12 @@ export default function ShowsTable() {
   );
 
   const createNewShow = () => dispatch(detailsActions.createNewShow());
+  const handleIncDec = (payload) => dispatch(updateSeasonOrEpisode(payload))
   const selectShow = (show) => dispatch(detailsActions.selectShow(show));
   const handleItemCheck = (payload) => dispatch(toggleCheck(payload));
   const handleSelectAll = () => dispatch(toggleCheckAll(shows.length));
 
-  const handleDelete = () => {
+  function handleDelete() {
     const selectedIds = [];
     selectedShows.forEach((isSelected, i) => {
       if (isSelected) selectedIds.push(shows[i].id);
@@ -86,6 +87,7 @@ export default function ShowsTable() {
                     selectShow={selectShow}
                     openDetails={openDetails}
                     handleCheck={handleItemCheck}
+                    handleIncDec={handleIncDec}
                   />
                 ))}
             </TableBody>

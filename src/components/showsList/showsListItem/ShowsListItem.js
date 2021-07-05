@@ -3,16 +3,30 @@ import clsx from 'clsx';
 import { TableRow, TableCell, Checkbox } from '@material-ui/core';
 
 import useStyles from './ShowsListItemStyles';
+import NumberTableCell from './NumberTableCell';
 
 export default function ShowsListItem(props) {
   const classes = useStyles();
 
-  const { i, show, isChecked, selectShow, openDetails, handleCheck } = props;
+  const {
+    i,
+    show,
+    isChecked,
+    selectShow,
+    openDetails,
+    handleCheck,
+    handleIncDec,
+  } = props;
+
   const { id, title, season, episode, status, note, tags } = show;
 
   function handleShowClick() {
     selectShow(show);
     openDetails();
+  }
+
+  function handleIncDecClick(field, isIncrementing) {
+    handleIncDec({ id, field, isIncrementing });
   }
 
   function handleCheckClick(e) {
@@ -46,15 +60,33 @@ export default function ShowsListItem(props) {
 
       <TableCell onClick={handleShowClick}>{title}</TableCell>
 
-      <TableCell onClick={handleShowClick} align='center'>{season}</TableCell>
+      <NumberTableCell
+        name='season'
+        onClick={handleShowClick}
+        handleIncDec={handleIncDecClick}
+      >
+        {season}
+      </NumberTableCell>
 
-      <TableCell onClick={handleShowClick} align='center'>{episode}</TableCell>
+      <NumberTableCell
+        name='episode'
+        onClick={handleShowClick}
+        handleIncDec={handleIncDecClick}
+      >
+        {episode}
+      </NumberTableCell>
 
-      <TableCell onClick={handleShowClick} align='center'>{status}</TableCell>
+      <TableCell onClick={handleShowClick} align='center'>
+        {status}
+      </TableCell>
 
-      <TableCell onClick={handleShowClick} align='center'>{formattedTags()}</TableCell>
+      <TableCell onClick={handleShowClick} align='center'>
+        {formattedTags()}
+      </TableCell>
 
-      <TableCell onClick={handleShowClick} align='center'>{note}</TableCell>
+      <TableCell onClick={handleShowClick} align='center'>
+        {note}
+      </TableCell>
     </TableRow>
   );
 }

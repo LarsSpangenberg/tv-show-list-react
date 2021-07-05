@@ -8,8 +8,5 @@ export default makeStyles((theme) => ({
   },
   textCenter: {
     textAlign: 'center',
-  },
-  numberCell: {
-    textAlign: 'center',
-  },
+  }
 }));
