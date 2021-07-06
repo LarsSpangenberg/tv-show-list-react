@@ -33,7 +33,7 @@ export default function ShowsListItem(props) {
     handleCheck({ i, isChecked: e.target.checked });
   }
 
-  function formattedTags() {
+  function getFormattedTags() {
     let tagText = '';
 
     if (tags) {
@@ -88,7 +88,7 @@ export default function ShowsListItem(props) {
       </TableCell>
 
       <TableCell name='tags' onClick={handleShowClick} align='center'>
-        {formattedTags()}
+        {getFormattedTags()}
       </TableCell>
 
       <TableCell name='note' onClick={handleShowClick} align='center'>
