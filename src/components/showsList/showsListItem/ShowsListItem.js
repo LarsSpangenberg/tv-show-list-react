@@ -11,8 +11,7 @@ export default function ShowsListItem(props) {
     i,
     show,
     isChecked,
-    selectShow,
-    openDetails,
+    handleClick,
     handleCheck,
     handleIncDec,
   } = props;
@@ -21,8 +20,7 @@ export default function ShowsListItem(props) {
 
   function handleShowClick(e) {
     const focusField = e.target.getAttribute('name');
-    selectShow({ ...show, focusField });
-    openDetails();
+    handleClick({ ...show, focusField });
   }
 
   function handleIncDecClick(field, isIncrementing) {

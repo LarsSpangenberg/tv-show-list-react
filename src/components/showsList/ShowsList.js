@@ -48,6 +48,11 @@ export default function ShowsTable() {
     dispatch(resetChecked());
   };
 
+  function handleShowClick(show) {
+    selectShow(show);
+    openDetails();
+  }
+
   function openDetails() {
     setIsDetailsOpen(true);
   }
@@ -84,8 +89,7 @@ export default function ShowsTable() {
                     i={i}
                     show={show}
                     isChecked={selectedShows[i] || false}
-                    selectShow={selectShow}
-                    openDetails={openDetails}
+                    handleClick={handleShowClick}
                     handleCheck={handleItemCheck}
                     handleIncDec={handleIncDec}
                   />
