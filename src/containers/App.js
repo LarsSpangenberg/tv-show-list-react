@@ -1,13 +1,17 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
-import ShowsTable from "components/showsList/ShowsList";
+import ShowsTable from 'components/showsList/ShowsList';
 
-import { user } from "assets/mock-user.js";
-import * as actions from "store/ShowsSlice";
+import useStyles from './AppStyles';
+
+import { user } from 'assets/mock-user.js';
+import * as actions from 'store/ShowsSlice';
 
 export default function App() {
   const dispatch = useDispatch();
+  const classes = useStyles();
+
   const shows = useSelector((state) => state.shows);
 
   useEffect(() => {
@@ -24,7 +28,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className='App'>
+    <div>
       <ShowsTable shows={shows} />
     </div>
   );

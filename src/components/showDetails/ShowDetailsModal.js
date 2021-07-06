@@ -24,7 +24,9 @@ export default function ShowDetailsModal(props) {
   const dispatch = useDispatch();
 
   const { open, handleClose } = props;
-  const { isNew, focusField, ...showDetails } = useSelector((state) => state.showDetails);
+  const { isNew, focusField, ...showDetails } = useSelector(
+    (state) => state.showDetails
+  );
 
   const handleDetailChange = (e) =>
     dispatch(updateSelection({ [e.target.name]: e.target.value }));
@@ -51,6 +53,7 @@ export default function ShowDetailsModal(props) {
 
   return (
     <Dialog
+      className={classes.root}
       open={open}
       onClose={closeModal}
       TransitionComponent={Slide}
@@ -69,13 +72,11 @@ export default function ShowDetailsModal(props) {
         </IconButton>
       </DialogTitle>
 
-      <DialogContent className={classes.content}>
-        <ShowDetailsForm
-          showDetails={showDetails}
-          focusField={focusField}
-          handleChange={handleDetailChange}
-        />
-      </DialogContent>
+      <ShowDetailsForm
+        showDetails={showDetails}
+        focusField={focusField}
+        handleChange={handleDetailChange}
+      />
 
       <DialogActions>
         {!isNew && (

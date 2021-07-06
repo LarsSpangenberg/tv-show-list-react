@@ -1,6 +1,9 @@
 import { makeStyles } from '@material-ui/core';
 
 export default makeStyles((theme) => ({
+  root: {
+    overflow: 'hidden',
+  },
   dialogTitle: {
     backgroundColor: theme.palette.primary.main,
   },
@@ -8,9 +11,6 @@ export default makeStyles((theme) => ({
     position: 'absolute',
     right: theme.spacing(1),
     top: theme.spacing(1),
-  },
-  content: {
-    overflowY: 'hidden',
   },
   deleteButton: {
     color: theme.palette.error.main
