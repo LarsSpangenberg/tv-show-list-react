@@ -10,9 +10,13 @@ const mainTheme = createMuiTheme({
       light: '#e9e891',
     } 
   },
+  dimensions: {
+    headerHeight: 150,
+    sidebarWidth: 150,
+  },
   shape: {
     borderRadius: 8,
-  }
+  },
 });
 
 export default mainTheme;

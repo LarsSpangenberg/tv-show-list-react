@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
+import Header from 'components/header/Header';
 import ShowsTable from 'components/showsList/ShowsList';
 
 import useStyles from './AppStyles';
@@ -9,8 +10,8 @@ import { user } from 'assets/mock-user.js';
 import * as actions from 'store/ShowsSlice';
 
 export default function App() {
+  useStyles();
   const dispatch = useDispatch();
-  const classes = useStyles();
 
   const shows = useSelector((state) => state.shows);
 
@@ -29,6 +30,7 @@ export default function App() {
 
   return (
     <div>
+      <Header />
       <ShowsTable shows={shows} />
     </div>
   );
