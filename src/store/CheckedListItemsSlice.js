@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const defaultState = {
   checked: [],
   numChecked: 0,
-}
+};
 
 export const checkedListItemsSlice = createSlice({
   name: 'checkedListItems',
@@ -40,11 +40,12 @@ export const checkedListItemsSlice = createSlice({
       }
     },
     resetChecked() {
-      return defaultState
-    }
+      return defaultState;
+    },
   },
 });
 
-export const { toggleCheck, toggleCheckAll, resetChecked } = checkedListItemsSlice.actions;
+export const { toggleCheck, toggleCheckAll, resetChecked } =
+  checkedListItemsSlice.actions;
 
 export default checkedListItemsSlice.reducer;
