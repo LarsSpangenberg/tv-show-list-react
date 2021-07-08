@@ -21,7 +21,7 @@ export default function Header() {
           </Typography>
 
           <Typography className={classes.subtitle} component='h2' variant='h6'>
-            Keep track of your favorite shows
+            Keep Track of Your Favorite Shows
           </Typography>
         </Box>
       </Toolbar>
