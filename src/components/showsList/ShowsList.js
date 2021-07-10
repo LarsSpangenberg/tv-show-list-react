@@ -40,7 +40,7 @@ export default function ShowsTable() {
   const selectShow = (show) => dispatch(detailsActions.selectShow(show));
   const handleIncDec = (payload) => dispatch(updateSeasonOrEpisode(payload));
   const handleItemCheck = (payload) => dispatch(checkboxActions.toggleCheck(payload));
-  const handleSelectAll = () => dispatch(checkboxActions.toggleCheckAll(shows.length));
+  const handleCheckAll = () => dispatch(checkboxActions.toggleCheckAll(shows.length));
 
   function handleDelete() {
     const selectedIds = [];
@@ -90,7 +90,7 @@ export default function ShowsTable() {
             <ShowsListHead
               numSelected={numSelected}
               rowsCount={shows.length}
-              handleSelectAll={handleSelectAll}
+              handleCheckAll={handleCheckAll}
             />
 
             <TableBody>
