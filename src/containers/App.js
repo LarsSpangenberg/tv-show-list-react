@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import Header from 'components/header/Header';
-import ShowsTable from 'components/showsList/ShowsList';
+import ShowsList from 'components/showsList/ShowsList';
+import Sidebar from 'components/sidebarLeft/Sidebar';
 
 import useStyles from './AppStyles';
 
@@ -31,7 +32,8 @@ export default function App() {
   return (
     <div>
       <Header />
-      <ShowsTable shows={shows} />
+      <Sidebar />
+      <ShowsList shows={shows} />
     </div>
   );
 }

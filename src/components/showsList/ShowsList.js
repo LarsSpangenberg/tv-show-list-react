@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import clsx from 'clsx';
 
 import {
   Container,
@@ -17,8 +18,9 @@ import ShowsListHead from 'components/showsList/showsListHead/ShowsListHead';
 import ShowsListItem from 'components/showsList/showsListItem/ShowsListItem';
 import ShowDetailsModal from 'components/showDetails/ShowDetailsModal';
 
+import * as uiActions from 'store/UiSlice';
 import * as detailsActions from 'store/ShowDetailsSlice';
-import { toggleCheck, toggleCheckAll, resetChecked } from 'store/CheckedListItemsSlice';
+import * as checkboxActions from 'store/CheckedListItemsSlice';
 import { updateSeasonOrEpisode, deleteShows } from 'store/ShowsSlice';
 
 export default function ShowsTable() {
@@ -31,12 +33,14 @@ export default function ShowsTable() {
   const { numChecked: numSelected, checked: selectedShows } = useSelector(
     (state) => state.checkedListItems
   );
+  const { isSidebarOpen } = useSelector((state) => state.ui);
 
+  const openSidebar = () => dispatch(uiActions.openSidebar());
   const createNewShow = () => dispatch(detailsActions.createNewShow());
-  const handleIncDec = (payload) => dispatch(updateSeasonOrEpisode(payload))
   const selectShow = (show) => dispatch(detailsActions.selectShow(show));
-  const handleItemCheck = (payload) => dispatch(toggleCheck(payload));
-  const handleSelectAll = () => dispatch(toggleCheckAll(shows.length));
+  const handleIncDec = (payload) => dispatch(updateSeasonOrEpisode(payload));
+  const handleItemCheck = (payload) => dispatch(checkboxActions.toggleCheck(payload));
+  const handleSelectAll = () => dispatch(checkboxActions.toggleCheckAll(shows.length));
 
   function handleDelete() {
     const selectedIds = [];
@@ -45,8 +49,8 @@ export default function ShowsTable() {
     });
 
     dispatch(deleteShows(selectedIds));
-    dispatch(resetChecked());
-  };
+    dispatch(checkboxActions.resetChecked());
+  }
 
   function handleShowClick(show) {
     selectShow(show);
@@ -68,11 +72,18 @@ export default function ShowsTable() {
 
   return (
     <>
-      <Container className={classes.root}>
+      <Container
+        className={clsx(
+          classes.root,
+          isSidebarOpen ? classes.root_sidebarOpen : ''
+        )}
+      >
         <TableContainer component={Paper}>
           <ShowsListToolbar
             numSelected={numSelected}
+            isSidebarOpen={isSidebarOpen}
             handleDelete={handleDelete}
+            handleFilterClick={openSidebar}
           />
 
           <Table>

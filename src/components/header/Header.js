@@ -11,7 +11,7 @@ export default function Header() {
   return (
     <AppBar position='static'>
       <Toolbar className={classes.toolbar}>
-        <Box className={classes.brandingContainer}>
+        <Box className={classes.brandingContainer} zIndex={1250}>
           <img src={BrandingImage} alt='branding' />
         </Box>
 

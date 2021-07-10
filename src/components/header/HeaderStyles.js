@@ -17,7 +17,7 @@ export default makeStyles((theme) => {
       width: sidebarWidth,
     },
     titleContainer: {
-      marginLeft: sidebarWidth,
+      marginLeft: sidebarWidth + theme.spacing(2),
     },
     subtitle: {
       marginTop: theme.spacing(1),
