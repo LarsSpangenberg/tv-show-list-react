@@ -1,6 +1,14 @@
 import React, { useRef, useEffect } from 'react';
 import { Grid, DialogContent, TextField, MenuItem } from '@material-ui/core';
 
+import {
+  CURRENT,
+  COMPLETED,
+  PLAN_TO_WATCH,
+  ON_HOLD,
+  DROPPED,
+} from 'constants/statusValues';
+
 import useStyles from './ShowDetailsFormStyles';
 
 export default function ShowDetailsForm(props) {
@@ -65,11 +73,11 @@ export default function ShowDetailsForm(props) {
               inputRef={statusInput}
               fullWidth
             >
-              <MenuItem value='current'>Currently Watching</MenuItem>
-              <MenuItem value='completed'>Completed</MenuItem>
-              <MenuItem value='plan to watch'>Plan to Watch</MenuItem>
-              <MenuItem value='on hold'>On Hold</MenuItem>
-              <MenuItem value='dropped'>Dropped</MenuItem>
+              <MenuItem value={CURRENT}>Currently Watching</MenuItem>
+              <MenuItem value={COMPLETED}>Completed</MenuItem>
+              <MenuItem value={PLAN_TO_WATCH}>Plan to Watch</MenuItem>
+              <MenuItem value={ON_HOLD}>On Hold</MenuItem>
+              <MenuItem value={DROPPED}>Dropped</MenuItem>
             </TextField>
           </Grid>
         </Grid>

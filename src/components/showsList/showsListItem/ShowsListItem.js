@@ -1,21 +1,21 @@
 import React from 'react';
 import { TableRow, TableCell, Checkbox } from '@material-ui/core';
+import NumberTableCell from './NumberTableCell';
+
+import {
+  CURRENT,
+  COMPLETED,
+  PLAN_TO_WATCH,
+  ON_HOLD,
+  DROPPED,
+} from 'constants/statusValues';
 
 import useStyles from './ShowsListItemStyles';
-import NumberTableCell from './NumberTableCell';
 
 export default function ShowsListItem(props) {
   const classes = useStyles();
 
-  const {
-    i,
-    show,
-    isChecked,
-    handleClick,
-    handleCheck,
-    handleIncDec,
-  } = props;
-
+  const { i, show, isChecked, handleClick, handleCheck, handleIncDec } = props;
   const { id, title, season, episode, status, note, tags } = show;
 
   function handleShowClick(e) {
@@ -42,13 +42,30 @@ export default function ShowsListItem(props) {
           tagText += '...';
           break;
         }
-        
+
         tagText += tags[i];
         if (i !== lastIndex && i < 2) tagText += ', ';
-      };
+      }
     }
 
     return tagText;
+  }
+
+  function getFormattedStatus() {
+    switch (status) {
+      case CURRENT:
+        return 'Current';
+      case COMPLETED:
+        return 'Completed';
+      case PLAN_TO_WATCH:
+        return 'Plan to Watch';
+      case ON_HOLD:
+        return 'Hn Hold';
+      case DROPPED:
+        return 'Dropped';
+      default:
+        return status;
+    }
   }
 
   return (
@@ -82,7 +99,7 @@ export default function ShowsListItem(props) {
       </NumberTableCell>
 
       <TableCell name='status' onClick={handleShowClick} align='center'>
-        {status}
+        {getFormattedStatus()}
       </TableCell>
 
       <TableCell name='tags' onClick={handleShowClick} align='center'>

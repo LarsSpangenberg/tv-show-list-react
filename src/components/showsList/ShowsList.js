@@ -18,10 +18,10 @@ import ShowsListHead from 'components/showsList/showsListHead/ShowsListHead';
 import ShowsListItem from 'components/showsList/showsListItem/ShowsListItem';
 import ShowDetailsModal from 'components/showDetails/ShowDetailsModal';
 
-import * as uiActions from 'store/UiSlice';
-import * as detailsActions from 'store/ShowDetailsSlice';
-import * as checkboxActions from 'store/CheckedListItemsSlice';
-import { updateSeasonOrEpisode, deleteShows } from 'store/ShowsSlice';
+import * as uiActions from 'store/appData/UiSlice';
+import * as detailsActions from 'store/userData/ShowDetailsSlice';
+import * as checkboxActions from 'store/appData/CheckedListItemsSlice';
+import { updateSeasonOrEpisode, deleteShows } from 'store/userData/ShowsSlice';
 
 export default function ShowsTable() {
   const classes = useStyles();
@@ -30,17 +30,35 @@ export default function ShowsTable() {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
   const shows = useSelector((state) => state.shows);
-  const { numChecked: numSelected, checked: selectedShows } = useSelector(
+  const { isSidebarOpen } = useSelector((state) => state.ui);
+
+  const { numChecked, checked: selectedShows } = useSelector(
     (state) => state.checkedListItems
   );
-  const { isSidebarOpen } = useSelector((state) => state.ui);
+
+  const { status: statusFilter, tags: tagFilter } = useSelector(
+    (state) => state.filters
+  );
+
+  const filteredShows = shows.filter((show) => {
+    let matchesStatusFilter = true;
+    let matchesTagFilter = true;
+
+    if (statusFilter) {
+      matchesStatusFilter = statusFilter === show.status;
+    }
+
+    if (tagFilter.length > 0) {
+      matchesTagFilter = show.tags.some((tag) => tagFilter.includes(tag));
+    }
+
+    return matchesStatusFilter && matchesTagFilter;
+  });
 
   const openSidebar = () => dispatch(uiActions.openSidebar());
   const createNewShow = () => dispatch(detailsActions.createNewShow());
   const selectShow = (show) => dispatch(detailsActions.selectShow(show));
   const handleIncDec = (payload) => dispatch(updateSeasonOrEpisode(payload));
-  const handleItemCheck = (payload) => dispatch(checkboxActions.toggleCheck(payload));
-  const handleCheckAll = () => dispatch(checkboxActions.toggleCheckAll(shows.length));
 
   function handleDelete() {
     const selectedIds = [];
@@ -50,6 +68,14 @@ export default function ShowsTable() {
 
     dispatch(deleteShows(selectedIds));
     dispatch(checkboxActions.resetChecked());
+  }
+
+  function handleItemCheck(payload) {
+    dispatch(checkboxActions.toggleCheck(payload));
+  }
+
+  function handleCheckAll() {
+    dispatch(checkboxActions.toggleCheckAll(shows.length));
   }
 
   function handleShowClick(show) {
@@ -80,7 +106,7 @@ export default function ShowsTable() {
       >
         <TableContainer component={Paper}>
           <ShowsListToolbar
-            numSelected={numSelected}
+            numSelected={numChecked}
             isSidebarOpen={isSidebarOpen}
             handleDelete={handleDelete}
             handleFilterClick={openSidebar}
@@ -88,16 +114,17 @@ export default function ShowsTable() {
 
           <Table>
             <ShowsListHead
-              numSelected={numSelected}
+              numSelected={numChecked}
               rowsCount={shows.length}
               handleCheckAll={handleCheckAll}
             />
 
             <TableBody>
-              {shows &&
-                shows.map((show, i) => (
+              {filteredShows &&
+                filteredShows.map((show, i) => (
                   <ShowsListItem
                     i={i}
+                    key={show.id}
                     show={show}
                     isChecked={selectedShows[i] || false}
                     handleClick={handleShowClick}

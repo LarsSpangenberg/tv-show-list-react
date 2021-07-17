@@ -16,8 +16,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import ShowDetailsForm from './ShowDetailsForm';
 import useStyles from './ShowDetailsModalStyles';
 
-import { updateSelection, resetSelection } from 'store/ShowDetailsSlice';
-import * as actions from 'store/ShowsSlice';
+import { updateSelection, resetSelection } from 'store/userData/ShowDetailsSlice';
+import * as actions from 'store/userData/ShowsSlice';
 
 export default function ShowDetailsModal(props) {
   const classes = useStyles();

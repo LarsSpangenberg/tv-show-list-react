@@ -27,7 +27,12 @@ export const showsSlice = createSlice({
   },
 });
 
-export const { addShow, updateShow, updateSeasonOrEpisode, deleteShow, deleteShows } =
-  showsSlice.actions;
+export const {
+  addShow,
+  updateShow,
+  updateSeasonOrEpisode,
+  deleteShow,
+  deleteShows,
+} = showsSlice.actions;
 
 export default showsSlice.reducer;

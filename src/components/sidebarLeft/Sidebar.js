@@ -1,19 +1,42 @@
-import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { ClickAwayListener, Drawer } from '@material-ui/core';
-import * as uiActions from 'store/UiSlice';
+import {
+  ClickAwayListener,
+  Drawer,
+  Box,
+  TextField,
+  MenuItem,
+} from '@material-ui/core';
+
+import { createTag } from 'store/userData/TagsSlice';
+import * as filterActions from 'store/appData/FiltersSlice';
+import * as uiActions from 'store/appData/UiSlice';
+import * as status from 'constants/statusValues';
+
+import TagFilters from './tagFilters/TagFilters';
 
 import useStyles from './SidebarStyles';
 
 export default function Sidebar() {
   const classes = useStyles();
   const dispatch = useDispatch();
-
+  const tags = useSelector((state) => state.tags);
+  const activeStatusFilter = useSelector((state) => state.filters.status);
+  const activeTagFilters = useSelector((state) => state.filters.tags);
   const isSidebarOpen = useSelector((state) => state.ui.isSidebarOpen);
 
+  const createNewTag = (tag) => dispatch(createTag(tag));
+  const addTagFilter = (tag) => dispatch(filterActions.addTagFilter(tag));
+  const removeTagFilter = (tag) => dispatch(filterActions.removeTagFilter(tag));
+
+  function setStatusFilter(event) {
+    dispatch(filterActions.setStatusFilter(event.target.value));
+  }
+
   function closeSidebar() {
-    if (isSidebarOpen) dispatch(uiActions.closeSidebar());
+    if (isSidebarOpen) {
+      dispatch(uiActions.closeSidebar());
+    }
   }
 
   return (
@@ -22,8 +45,43 @@ export default function Sidebar() {
       mouseEvent='onMouseUp'
       touchEvent='onTouchEnd'
     >
-      <Drawer open={isSidebarOpen} variant='persistent' anchor='left'>
+      <Drawer
+        classes={{ paper: classes.sidebar }}
+        open={isSidebarOpen}
+        variant='persistent'
+        anchor='left'
+      >
         <div className={classes.logoBg} />
+
+        <Box pt={2}>
+          <TextField
+            select
+            className={classes.statusTextfield}
+            label='Filter by Status'
+            value={activeStatusFilter}
+            onChange={setStatusFilter}
+            InputLabelProps={{ className: classes.inputSpacing }}
+            inputProps={{ className: classes.inputSpacing }}
+            fullWidth
+          >
+            <MenuItem value=''>No Filter</MenuItem>
+            <MenuItem value={status.CURRENT}>Current</MenuItem>
+            <MenuItem value={status.COMPLETED}>Completed</MenuItem>
+            <MenuItem value={status.PLAN_TO_WATCH}>Watch Later</MenuItem>
+            <MenuItem value={status.ON_HOLD}>On Hold</MenuItem>
+            <MenuItem value={status.DROPPED}>Dropped</MenuItem>
+          </TextField>
+
+          <TagFilters
+            tags={tags}
+            activeTagFilters={activeTagFilters}
+            createNewTag={createNewTag}
+            addTagFilter={addTagFilter}
+            removeTagFilter={removeTagFilter}
+            inputSpacingClass={classes.inputSpacing}
+            isSidebarOpen={isSidebarOpen}
+          />
+        </Box>
       </Drawer>
     </ClickAwayListener>
   );

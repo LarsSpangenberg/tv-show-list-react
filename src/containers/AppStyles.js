@@ -8,5 +8,9 @@ export default makeStyles((theme) => ({
     '*::-webkit-scrollbar-thumb': {
       backgroundColor: theme.palette.grey['A100'],
     },
+    ul: {
+      listStyleType: 'none',
+      paddingInlineStart: 0,
+    },
   },
 }));

@@ -31,7 +31,7 @@ export default function ShowsTable(props) {
         </Tooltip>
       )}
 
-      <Tooltip title='Filters and Sorting'>
+      <Tooltip title='Filters'>
         <IconButton onClick={handleFilterClick} disabled={isSidebarOpen}>
           <FilterIcon />
         </IconButton>
