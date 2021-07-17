@@ -5,7 +5,8 @@ export const showsSlice = createSlice({
   initialState: [],
   reducers: {
     addShow(state, action) {
-      state.push(action.payload);
+      // TODO: change when details modal gets tags implemented
+      state.push({...action.payload, tags: []});
     },
     updateShow(state, action) {
       const i = state.findIndex((show) => show.id === action.payload.id);
