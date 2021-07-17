@@ -9,7 +9,7 @@ import useStyles from './TagFiltersStyles';
 
 export default function TagFilters(props) {
   const classes = useStyles();
-  
+
   const {
     tags,
     activeTagFilters,
@@ -29,7 +29,7 @@ export default function TagFilters(props) {
   // reset autocomplete input when sidebar closes
   useEffect(() => {
     if (!isSidebarOpen) resetTagInputValue();
-  }, [isSidebarOpen])
+  }, [isSidebarOpen]);
 
   function resetTagInputValue() {
     setTagInputValue('');

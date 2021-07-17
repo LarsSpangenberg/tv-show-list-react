@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import clsx from 'clsx';
 
@@ -12,11 +12,12 @@ import {
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
-import useStyles from './ShowsListStyles';
 import ShowsListToolbar from 'components/showsList/showsListToolbar/ShowsListToolbar';
 import ShowsListHead from 'components/showsList/showsListHead/ShowsListHead';
 import ShowsListItem from 'components/showsList/showsListItem/ShowsListItem';
 import ShowDetailsModal from 'components/showDetails/ShowDetailsModal';
+
+import useStyles from './ShowsListStyles';
 
 import * as uiActions from 'store/appData/UiSlice';
 import * as detailsActions from 'store/userData/ShowDetailsSlice';

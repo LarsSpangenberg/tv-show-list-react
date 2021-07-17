@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { AppBar, Toolbar, Box, Typography } from '@material-ui/core';
 import BrandingImage from 'assets/logo.svg';
 

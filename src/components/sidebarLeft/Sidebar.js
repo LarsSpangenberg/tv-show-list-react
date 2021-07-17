@@ -8,14 +8,13 @@ import {
   MenuItem,
 } from '@material-ui/core';
 
+import useStyles from './SidebarStyles';
+import TagFilters from './tagFilters/TagFilters';
+
 import { createTag } from 'store/userData/TagsSlice';
 import * as filterActions from 'store/appData/FiltersSlice';
 import * as uiActions from 'store/appData/UiSlice';
 import * as status from 'constants/statusValues';
-
-import TagFilters from './tagFilters/TagFilters';
-
-import useStyles from './SidebarStyles';
 
 export default function Sidebar() {
   const classes = useStyles();

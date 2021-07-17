@@ -1,6 +1,7 @@
-import React from 'react';
 import { TableRow, TableCell, Checkbox } from '@material-ui/core';
 import NumberTableCell from './NumberTableCell';
+
+import useStyles from './ShowsListItemStyles';
 
 import {
   CURRENT,
@@ -10,7 +11,6 @@ import {
   DROPPED,
 } from 'constants/statusValues';
 
-import useStyles from './ShowsListItemStyles';
 
 export default function ShowsListItem(props) {
   const classes = useStyles();

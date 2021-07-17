@@ -1,10 +1,8 @@
-import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
   Dialog,
   DialogTitle,
-  DialogContent,
   DialogActions,
   Typography,
   IconButton,
@@ -16,8 +14,11 @@ import CloseIcon from '@material-ui/icons/Close';
 import ShowDetailsForm from './ShowDetailsForm';
 import useStyles from './ShowDetailsModalStyles';
 
-import { updateSelection, resetSelection } from 'store/userData/ShowDetailsSlice';
 import * as actions from 'store/userData/ShowsSlice';
+import {
+  updateSelection,
+  resetSelection,
+} from 'store/userData/ShowDetailsSlice';
 
 export default function ShowDetailsModal(props) {
   const classes = useStyles();

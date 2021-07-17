@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { TableHead, TableRow, TableCell, Checkbox } from '@material-ui/core';
 import CheckBoxIcon from '@material-ui/icons/CheckBoxOutlined';
 import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
@@ -28,15 +26,10 @@ export default function ShowsListHead(props) {
         </TableCell>
 
         <TableCell>Title</TableCell>
-
         <TableCell align='center'>Season</TableCell>
-
         <TableCell align='center'>Episode</TableCell>
-
         <TableCell align='center'>Status</TableCell>
-
         <TableCell align='center'>Tags</TableCell>
-
         <TableCell align='center'>Note</TableCell>
       </TableRow>
     </TableHead>

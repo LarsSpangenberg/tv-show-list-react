@@ -1,4 +1,3 @@
-import React from 'react';
 import { TableCell, Box, IconButton } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
@@ -11,7 +10,7 @@ export default function NumberTableCell(props) {
   const { name, handleIncDec, ...attr } = props;
 
   function handleIncDecClick(isIncrementing, e) {
-    e.stopPropagation();    
+    e.stopPropagation();
     handleIncDec(name, isIncrementing);
   }
 
