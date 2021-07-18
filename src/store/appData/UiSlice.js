@@ -10,7 +10,7 @@ export const uiSlice = createSlice({
       state.isSidebarOpen = true;
     },
     closeSidebar(state) {
-      state.isSidebarOpen = false;
+      if (state.isSidebarOpen) state.isSidebarOpen = false;
     },
   },
 });
