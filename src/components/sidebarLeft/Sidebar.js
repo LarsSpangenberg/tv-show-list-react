@@ -19,24 +19,18 @@ import * as status from 'constants/statusValues';
 export default function Sidebar() {
   const classes = useStyles();
   const dispatch = useDispatch();
+
   const tags = useSelector((state) => state.tags);
   const activeStatusFilter = useSelector((state) => state.filters.status);
   const activeTagFilters = useSelector((state) => state.filters.tags);
   const isSidebarOpen = useSelector((state) => state.ui.isSidebarOpen);
 
+  const closeSidebar = () => dispatch(uiActions.closeSidebar());
   const createNewTag = (tag) => dispatch(createTag(tag));
   const addTagFilter = (tag) => dispatch(filterActions.addTagFilter(tag));
   const removeTagFilter = (tag) => dispatch(filterActions.removeTagFilter(tag));
-
-  function setStatusFilter(event) {
+  const setStatusFilter = (event) =>
     dispatch(filterActions.setStatusFilter(event.target.value));
-  }
-
-  function closeSidebar() {
-    if (isSidebarOpen) {
-      dispatch(uiActions.closeSidebar());
-    }
-  }
 
   return (
     <ClickAwayListener
