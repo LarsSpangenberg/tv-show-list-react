@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSelector, createSlice } from '@reduxjs/toolkit';
 
 export const filtersSlice = createSlice({
   name: 'filters',
@@ -30,6 +30,15 @@ export const filtersSlice = createSlice({
 });
 
 export const { setStatusFilter, addTagFilter, removeTagFilter } =
-  filtersSlice.actions;
+filtersSlice.actions;
 
 export default filtersSlice.reducer;
+
+// Selectors
+const filterState = (state => state.filters);
+
+export const isAnyFilterActive = createSelector(filterState, (filters) => {
+  const isStatusActive = filters.status !== '';
+  const isTagsActive = filters.tags.length > 0; 
+  return isStatusActive || isTagsActive;
+});

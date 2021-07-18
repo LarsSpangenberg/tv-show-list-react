@@ -23,6 +23,8 @@ import * as uiActions from 'store/appData/UiSlice';
 import * as detailsActions from 'store/userData/ShowDetailsSlice';
 import * as checkboxActions from 'store/appData/CheckedListItemsSlice';
 import { updateSeasonOrEpisode, deleteShows } from 'store/userData/ShowsSlice';
+import { isAnyFilterActive as isFilterActive } from 'store/appData/FiltersSlice';
+import EmptyListMessage from './emptyListMessage/EmptyListMessage';
 
 export default function ShowsTable() {
   const classes = useStyles();
@@ -31,6 +33,7 @@ export default function ShowsTable() {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
   const shows = useSelector((state) => state.shows);
+  const isAnyFilterActive = useSelector((state) => isFilterActive(state));
   const { isSidebarOpen } = useSelector((state) => state.ui);
 
   const { numChecked, checked: selectedShows } = useSelector(
@@ -41,6 +44,7 @@ export default function ShowsTable() {
     (state) => state.filters
   );
 
+  // TODO: Create a selector for filteredShows
   const filteredShows = shows.filter((show) => {
     let matchesStatusFilter = true;
     let matchesTagFilter = true;
@@ -56,19 +60,27 @@ export default function ShowsTable() {
     return matchesStatusFilter && matchesTagFilter;
   });
 
-  const openSidebar = () => dispatch(uiActions.openSidebar());
   const createNewShow = () => dispatch(detailsActions.createNewShow());
   const selectShow = (show) => dispatch(detailsActions.selectShow(show));
   const handleIncDec = (payload) => dispatch(updateSeasonOrEpisode(payload));
+  const openSidebar = () => dispatch(uiActions.openSidebar());
 
-  function handleDelete() {
-    const selectedIds = [];
-    selectedShows.forEach((isSelected, i) => {
-      if (isSelected) selectedIds.push(shows[i].id);
-    });
+  function openDetails() {
+    setIsDetailsOpen(true);
+  }
 
-    dispatch(deleteShows(selectedIds));
-    dispatch(checkboxActions.resetChecked());
+  function closeDetails() {
+    setIsDetailsOpen(false);
+  }
+
+  function handleShowClick(show) {
+    selectShow(show);
+    openDetails();
+  }
+
+  function handleCreateNewShowClick() {
+    createNewShow();
+    openDetails();
   }
 
   function handleItemCheck(payload) {
@@ -79,22 +91,14 @@ export default function ShowsTable() {
     dispatch(checkboxActions.toggleCheckAll(shows.length));
   }
 
-  function handleShowClick(show) {
-    selectShow(show);
-    openDetails();
-  }
+  function handleDelete() {
+    const selectedIds = [];
+    selectedShows.forEach((isSelected, i) => {
+      if (isSelected) selectedIds.push(shows[i].id);
+    });
 
-  function openDetails() {
-    setIsDetailsOpen(true);
-  }
-
-  function closeDetails() {
-    setIsDetailsOpen(false);
-  }
-
-  function handleFabClick() {
-    createNewShow();
-    openDetails();
+    dispatch(deleteShows(selectedIds));
+    dispatch(checkboxActions.resetChecked());
   }
 
   return (
@@ -135,10 +139,21 @@ export default function ShowsTable() {
                 ))}
             </TableBody>
           </Table>
+
+          {filteredShows.length === 0 && (
+            <EmptyListMessage
+              isAnyFilterActive={isAnyFilterActive}
+              handleClick={handleCreateNewShowClick}
+            />
+          )}
         </TableContainer>
       </Container>
 
-      <Fab className={classes.fab} onClick={handleFabClick} color='secondary'>
+      <Fab
+        className={classes.fab}
+        onClick={handleCreateNewShowClick}
+        color='secondary'
+      >
         <AddIcon />
       </Fab>
 
