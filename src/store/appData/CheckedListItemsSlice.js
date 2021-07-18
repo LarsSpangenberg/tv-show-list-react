@@ -1,4 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSelector, createSlice } from '@reduxjs/toolkit';
+import { showsState } from 'store/userData/ShowsSlice';
 
 const defaultState = {
   checked: [],
@@ -49,3 +50,18 @@ export const { toggleCheck, toggleCheckAll, resetChecked } =
   checkedListItemsSlice.actions;
 
 export default checkedListItemsSlice.reducer;
+
+// Selectors
+const checkedListItems = (state) => state.checkedListItems.checked;
+
+ export const getCheckedItemIds = createSelector(
+  [showsState, checkedListItems],
+  (shows, checkedItems) => {
+    const checkedIds = [];
+    checkedItems.forEach((isSelected, i) => {
+      if (isSelected) checkedIds.push(shows[i].id);
+    });
+
+    return checkedIds;
+  }
+);

@@ -37,3 +37,6 @@ export const {
 } = showsSlice.actions;
 
 export default showsSlice.reducer;
+
+// Selectors
+export const showsState = (state) => state.shows;

@@ -16,15 +16,23 @@ import ShowsListToolbar from 'components/showsList/showsListToolbar/ShowsListToo
 import ShowsListHead from 'components/showsList/showsListHead/ShowsListHead';
 import ShowsListItem from 'components/showsList/showsListItem/ShowsListItem';
 import ShowDetailsModal from 'components/showDetails/ShowDetailsModal';
+import EmptyListMessage from './emptyListMessage/EmptyListMessage';
 
 import useStyles from './ShowsListStyles';
 
 import * as uiActions from 'store/appData/UiSlice';
 import * as detailsActions from 'store/userData/ShowDetailsSlice';
-import * as checkboxActions from 'store/appData/CheckedListItemsSlice';
 import { updateSeasonOrEpisode, deleteShows } from 'store/userData/ShowsSlice';
-import { isAnyFilterActive as isFilterActive } from 'store/appData/FiltersSlice';
-import EmptyListMessage from './emptyListMessage/EmptyListMessage';
+import {
+  toggleCheck,
+  toggleCheckAll,
+  resetChecked,
+  getCheckedItemIds,
+} from 'store/appData/CheckedListItemsSlice';
+import {
+  getFilteredShows,
+  getIsAnyFilterActive,
+} from 'store/appData/FiltersSlice';
 
 export default function ShowsTable() {
   const classes = useStyles();
@@ -33,45 +41,23 @@ export default function ShowsTable() {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
   const shows = useSelector((state) => state.shows);
-  const isAnyFilterActive = useSelector((state) => isFilterActive(state));
-  const { isSidebarOpen } = useSelector((state) => state.ui);
-
+  const filteredShows = useSelector((state) => getFilteredShows(state));
+  const isAnyFilterActive = useSelector((state) => getIsAnyFilterActive(state));
+  const checkedItemIds = useSelector((state) => getCheckedItemIds(state));
   const { numChecked, checked: selectedShows } = useSelector(
     (state) => state.checkedListItems
   );
+  const { isSidebarOpen } = useSelector((state) => state.ui);
 
-  const { status: statusFilter, tags: tagFilter } = useSelector(
-    (state) => state.filters
-  );
-
-  // TODO: Create a selector for filteredShows
-  const filteredShows = shows.filter((show) => {
-    let matchesStatusFilter = true;
-    let matchesTagFilter = true;
-
-    if (statusFilter) {
-      matchesStatusFilter = statusFilter === show.status;
-    }
-
-    if (tagFilter.length > 0) {
-      matchesTagFilter = show.tags.some((tag) => tagFilter.includes(tag));
-    }
-
-    return matchesStatusFilter && matchesTagFilter;
-  });
+  const openDetails = () => setIsDetailsOpen(true);
+  const closeDetails = () => setIsDetailsOpen(false);
 
   const createNewShow = () => dispatch(detailsActions.createNewShow());
   const selectShow = (show) => dispatch(detailsActions.selectShow(show));
+  const handleItemCheck = (payload) => dispatch(toggleCheck(payload));
+  const handleCheckAll = () => dispatch(toggleCheckAll(shows.length));
   const handleIncDec = (payload) => dispatch(updateSeasonOrEpisode(payload));
   const openSidebar = () => dispatch(uiActions.openSidebar());
-
-  function openDetails() {
-    setIsDetailsOpen(true);
-  }
-
-  function closeDetails() {
-    setIsDetailsOpen(false);
-  }
 
   function handleShowClick(show) {
     selectShow(show);
@@ -83,22 +69,9 @@ export default function ShowsTable() {
     openDetails();
   }
 
-  function handleItemCheck(payload) {
-    dispatch(checkboxActions.toggleCheck(payload));
-  }
-
-  function handleCheckAll() {
-    dispatch(checkboxActions.toggleCheckAll(shows.length));
-  }
-
   function handleDelete() {
-    const selectedIds = [];
-    selectedShows.forEach((isSelected, i) => {
-      if (isSelected) selectedIds.push(shows[i].id);
-    });
-
-    dispatch(deleteShows(selectedIds));
-    dispatch(checkboxActions.resetChecked());
+    dispatch(deleteShows(checkedItemIds));
+    dispatch(resetChecked());
   }
 
   return (
