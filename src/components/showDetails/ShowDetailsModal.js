@@ -1,3 +1,4 @@
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -19,6 +20,10 @@ import {
   updateSelection,
   resetSelection,
 } from 'store/userData/ShowDetailsSlice';
+
+const Transition = React.forwardRef((props, ref) => (
+  <Slide direction='up' ref={ref} {...props} />
+));
 
 export default function ShowDetailsModal(props) {
   const classes = useStyles();
@@ -57,7 +62,8 @@ export default function ShowDetailsModal(props) {
       className={classes.root}
       open={open}
       onClose={closeModal}
-      TransitionComponent={Slide}
+      TransitionComponent={Transition}
+      keepMounted
       maxWidth='sm'
       fullWidth
     >
