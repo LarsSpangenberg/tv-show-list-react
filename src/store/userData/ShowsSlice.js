@@ -1,12 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { getEqualValue as getEqualStatusValue } from 'constants/statusValues';
+
 
 export const showsSlice = createSlice({
   name: 'shows',
   initialState: [],
   reducers: {
     addShow(state, action) {
-      // TODO: change when details modal gets tags implemented
-      state.push({ ...action.payload, tags: action.payload.tags || [] });
+      state.push(normalizeShowData(action.payload));
     },
     updateShow(state, action) {
       const i = state.findIndex((show) => show.id === action.payload.id);
@@ -15,7 +16,7 @@ export const showsSlice = createSlice({
     updateSeasonOrEpisode(state, action) {
       const { id, field, isIncrementing } = action.payload;
       const i = state.findIndex((show) => show.id === id);
-
+      
       if (isIncrementing) state[i][field]++;
       else state[i][field]--;
     },
@@ -37,6 +38,14 @@ export const {
 } = showsSlice.actions;
 
 export default showsSlice.reducer;
+
+// util
+function normalizeShowData(show) {
+  const { tags, status } =  show;
+  const normalizedTags = tags || [];
+  const normalizedStatus = getEqualStatusValue(status);
+  return {...show, tags: normalizedTags, status: normalizedStatus}
+}
 
 // Selectors
 export const showsState = (state) => state.shows;

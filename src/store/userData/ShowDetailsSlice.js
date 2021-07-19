@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { CURRENT } from 'constants/statusValues';
 
 const defaultState = {
   title: '',
   season: 1,
   episode: 1,
-  status: 'current',
+  status: CURRENT,
   note: '',
   isNew: true,
   focusField: 'title',

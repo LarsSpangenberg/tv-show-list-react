@@ -25,7 +25,7 @@ export const user = {
       season: 4,
       episode: 22,
       note: 'finished latest episode',
-      status: 'completed',
+      status: 'watch later',
       tags: ['Superhero', 'Favorites', 'Disney+', 'Action'],
       data: {
         availableSeasons: 4,
