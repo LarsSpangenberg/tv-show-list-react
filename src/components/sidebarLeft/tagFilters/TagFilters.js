@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import { Box, TextField, Chip } from '@material-ui/core';
-import Autocomplete, {
-  createFilterOptions,
-} from '@material-ui/lab/Autocomplete';
+import CustomAutocomplete from 'components/ui/CustomTagAutocomplete';
 
 import useStyles from './TagFiltersStyles';
 
@@ -18,78 +16,58 @@ export default function TagFilters(props) {
     removeTagFilter,
     inputSpacingClass,
     isSidebarOpen,
+    setIgnoreSidebarClose,
   } = props;
 
   const [tagInputValue, setTagInputValue] = useState('');
-
-  const tagOptions = tags.concat(tagInputValue);
-  const addTagOptionText = `Add "${tagInputValue}"`;
-  const tagsClearable = tagInputValue !== '';
 
   // reset autocomplete input when sidebar closes
   useEffect(() => {
     if (!isSidebarOpen) resetTagInputValue();
   }, [isSidebarOpen]);
 
+  function handleOptionsOpen() {
+    setIgnoreSidebarClose(true);
+  }
+
+  function handleOptionsClose() {
+    setTimeout(() => {
+      setIgnoreSidebarClose(false);
+    }, 250);
+  }
+
   function resetTagInputValue() {
     setTagInputValue('');
   }
 
-  function handleTagInputChange(_, value, reason) {
-    if (reason === 'input') {
-      setTagInputValue(value);
-    } else if (reason === 'clear') {
-      resetTagInputValue();
-    }
+  function handleTagInputChange(value) {
+    setTagInputValue(value);
   }
 
-  function handleTagFilterChange(_, value, reason) {
-    if (reason === 'select-option') {
-      if (value === addTagOptionText) {
-        createNewTag(tagInputValue);
-        addTagFilter(tagInputValue);
-      } else {
-        addTagFilter(value);
-      }
-      resetTagInputValue();
-    }
+  function handleSelectOption(value) {
+    addTagFilter(value);
   }
 
-  /* 
-    When setting 'value' prop on Autocomplete, thus making it controlled, the inputValue prop on 
-    this function's 'state' param always returns an empty string. Once the value prop is removed it works 
-    fine, however this messes with the Autocomplete state and breaks the clear icon. 
-
-    Quick fix was to add the input value to the state manually so the filter gets the right values to work with.
-  */
-  function filterTagOptions(_, state) {
-    let newTags = createFilterOptions({
-      matchFrom: 'start',
-    })(tags, { ...state, inputValue: tagInputValue });
-
-    newTags = newTags.filter((tag) => !activeTagFilters.includes(tag));
-
-    if (tagInputValue !== '') {
-      newTags.push(addTagOptionText);
-    }
-
-    return newTags;
+  function handleSelectCreateNewOption(value) {
+    createNewTag(value);
+    addTagFilter(value);
   }
 
   return (
     <>
-      <Autocomplete
+      <CustomAutocomplete
         className={classes.tagsTextfield}
-        options={tagOptions}
+        options={tags}
+        selectedOptions={activeTagFilters}
         value={tagInputValue}
         inputValue={tagInputValue}
-        onChange={handleTagFilterChange}
+        onOptionSelect={handleSelectOption}
+        onCreateNewOptionSelect={handleSelectCreateNewOption}
         onInputChange={handleTagInputChange}
-        filterOptions={filterTagOptions}
-        disableClearable={!tagsClearable}
-        autoComplete
-        autoSelect
-        autoHighlight
+        onResetInputValue={resetTagInputValue}
+        onOpen={handleOptionsOpen}
+        onClose={handleOptionsClose}
+        
         openOnFocus
         renderInput={(params) => (
           <TextField

@@ -1,6 +1,10 @@
 import { useRef, useEffect } from 'react';
 import { Grid, DialogContent, TextField, MenuItem } from '@material-ui/core';
 
+import TagInput from './TagInput';
+
+import useStyles from './ShowDetailsFormStyles';
+
 import {
   CURRENT,
   COMPLETED,
@@ -9,19 +13,19 @@ import {
   DROPPED,
 } from 'constants/statusValues';
 
-import useStyles from './ShowDetailsFormStyles';
-
 export default function ShowDetailsForm(props) {
   const classes = useStyles();
 
-  const { showDetails, focusField, handleChange } = props;
-  const { title, status, season, episode, note } = showDetails;
+  const { showDetails, allTags, focusField, handleChange, createNewTag } =
+    props;
+  const { title, status, season, episode, note, tags } = showDetails;
 
   const titleInput = useRef();
   const statusInput = useRef();
   const seasonInput = useRef();
   const episodeInput = useRef();
   const noteInput = useRef();
+  const tagInput = useRef();
 
   useEffect(() => {
     switch (focusField) {
@@ -39,12 +43,24 @@ export default function ShowDetailsForm(props) {
       case 'note':
         noteInput.current.focus();
         break;
+      case 'tags':
+        tagInput.current.focus();
+        break;
       case 'title':
       default:
         titleInput.current.focus();
         break;
     }
   }, [focusField]);
+
+  function handleInputChange(e) {
+    const { name, value } = e.target;
+    handleChange(name, value);
+  }
+
+  function handleTagChange(updatedTags) {
+    handleChange('tags', updatedTags);
+  }
 
   return (
     <form noValidate autoComplete='off'>
@@ -56,7 +72,7 @@ export default function ShowDetailsForm(props) {
               label='Title'
               name='title'
               value={title}
-              onChange={handleChange}
+              onChange={handleInputChange}
               inputRef={titleInput}
               fullWidth
             />
@@ -69,7 +85,7 @@ export default function ShowDetailsForm(props) {
               label='Status'
               name='status'
               value={status}
-              onChange={handleChange}
+              onChange={handleInputChange}
               inputRef={statusInput}
               fullWidth
             >
@@ -92,7 +108,7 @@ export default function ShowDetailsForm(props) {
               label='Season'
               name='season'
               value={season}
-              onChange={handleChange}
+              onChange={handleInputChange}
               inputRef={seasonInput}
               variant='outlined'
               fullWidth
@@ -107,7 +123,7 @@ export default function ShowDetailsForm(props) {
               label='Episode'
               name='episode'
               value={episode}
-              onChange={handleChange}
+              onChange={handleInputChange}
               inputRef={episodeInput}
               variant='outlined'
               fullWidth
@@ -121,12 +137,22 @@ export default function ShowDetailsForm(props) {
               label='Note'
               name='note'
               value={note}
-              onChange={handleChange}
+              onChange={handleInputChange}
               inputRef={noteInput}
               variant='outlined'
               fullWidth
               multiline
               rows={4}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TagInput
+              allTags={allTags}
+              showTags={tags}
+              handleChange={handleTagChange}
+              createNewTag={createNewTag}
+              inputRef={tagInput}
             />
           </Grid>
         </Grid>

@@ -1,4 +1,4 @@
-import React from 'react';
+import { forwardRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
-import ShowDetailsForm from './ShowDetailsForm';
+import ShowDetailsForm from './showDetailsForm/ShowDetailsForm';
 import useStyles from './ShowDetailsModalStyles';
 
 import * as actions from 'store/userData/ShowsSlice';
@@ -20,9 +20,10 @@ import {
   updateSelection,
   resetSelection,
 } from 'store/userData/ShowDetailsSlice';
+import { createTag } from 'store/userData/TagsSlice';
 
-const Transition = React.forwardRef((props, ref) => (
-  <Slide direction='up' ref={ref} {...props} />
+const Transition = forwardRef((props, ref) => (
+  <Slide ref={ref} {...props} />
 ));
 
 export default function ShowDetailsModal(props) {
@@ -33,13 +34,17 @@ export default function ShowDetailsModal(props) {
   const { isNew, focusField, ...showDetails } = useSelector(
     (state) => state.showDetails
   );
+  const allTags = useSelector((state) => state.tags);
 
-  const handleDetailChange = (e) =>
-    dispatch(updateSelection({ [e.target.name]: e.target.value }));
   const saveNewShow = () => dispatch(actions.addShow(showDetails));
   const updateShow = () => dispatch(actions.updateShow(showDetails));
   const deleteShow = () => dispatch(actions.deleteShow(showDetails.id));
+  const createNewTag = (tag) => dispatch(createTag(tag));
   const handleReset = () => dispatch(resetSelection);
+
+  function handleDetailChange(key, value) {
+    dispatch(updateSelection({ [key]: value }));
+  }
 
   function closeModal() {
     handleClose();
@@ -63,7 +68,6 @@ export default function ShowDetailsModal(props) {
       open={open}
       onClose={closeModal}
       TransitionComponent={Transition}
-      keepMounted
       maxWidth='sm'
       fullWidth
     >
@@ -81,8 +85,10 @@ export default function ShowDetailsModal(props) {
 
       <ShowDetailsForm
         showDetails={showDetails}
+        allTags={allTags}
         focusField={focusField}
         handleChange={handleDetailChange}
+        createNewTag={createNewTag}
       />
 
       <DialogActions>

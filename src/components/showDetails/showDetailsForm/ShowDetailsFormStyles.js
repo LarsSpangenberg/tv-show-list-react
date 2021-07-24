@@ -7,6 +7,7 @@ export default makeStyles((theme) => ({
     overflowY: 'hidden',
   },
   contentBottom: {
+    height: 225,
     paddingTop: theme.spacing(2),
     paddingRight: theme.spacing(2),
   },
