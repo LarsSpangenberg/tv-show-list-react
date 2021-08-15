@@ -22,15 +22,12 @@ import {
 } from 'store/userData/ShowDetailsSlice';
 import { createTag } from 'store/userData/TagsSlice';
 
-const Transition = forwardRef((props, ref) => (
-  <Slide ref={ref} {...props} />
-));
+const Transition = forwardRef((props, ref) => <Slide ref={ref} {...props} />);
 
-export default function ShowDetailsModal(props) {
+export default function ShowDetailsModal({ open, handleClose }) {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const { open, handleClose } = props;
   const { isNew, focusField, ...showDetails } = useSelector(
     (state) => state.showDetails
   );

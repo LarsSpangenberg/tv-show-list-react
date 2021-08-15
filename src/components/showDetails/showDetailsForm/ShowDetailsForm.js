@@ -13,12 +13,14 @@ import {
   DROPPED,
 } from 'constants/statusValues';
 
-export default function ShowDetailsForm(props) {
+export default function ShowDetailsForm({
+  showDetails: { title, status, season, episode, note, tags },
+  allTags,
+  focusField,
+  handleChange,
+  createNewTag,
+}) {
   const classes = useStyles();
-
-  const { showDetails, allTags, focusField, handleChange, createNewTag } =
-    props;
-  const { title, status, season, episode, note, tags } = showDetails;
 
   const titleInput = useRef();
   const statusInput = useRef();

@@ -5,19 +5,17 @@ import CustomAutocomplete from 'components/ui/CustomTagAutocomplete';
 
 import useStyles from './TagFiltersStyles';
 
-export default function TagFilters(props) {
+export default function TagFilters({
+  tags,
+  activeTagFilters,
+  createNewTag,
+  addTagFilter,
+  removeTagFilter,
+  inputSpacingClass,
+  isSidebarOpen,
+  setIgnoreSidebarClose,
+}) {
   const classes = useStyles();
-
-  const {
-    tags,
-    activeTagFilters,
-    createNewTag,
-    addTagFilter,
-    removeTagFilter,
-    inputSpacingClass,
-    isSidebarOpen,
-    setIgnoreSidebarClose,
-  } = props;
 
   const [tagInputValue, setTagInputValue] = useState('');
 

@@ -3,22 +3,20 @@ import Autocomplete, {
   createFilterOptions,
 } from '@material-ui/lab/Autocomplete';
 
-export default function CustomTagAutocomplete(props) {
-  const {
-    options: userOptions,
-    selectedOptions,
-    value: userValue,
-    inputValue: userInputValue,
-    filterOptions: userFilterOptions,
-    onChange,
-    onOptionSelect,
-    onCreateNewOptionSelect,
-    onRemoveOption,
-    onInputChange,
-    onResetInputValue,
-    ...attributes
-  } = props;
-
+export default function CustomTagAutocomplete({
+  options: userOptions,
+  selectedOptions,
+  value: userValue,
+  inputValue: userInputValue,
+  filterOptions: userFilterOptions,
+  onChange,
+  onOptionSelect,
+  onCreateNewOptionSelect,
+  onRemoveOption,
+  onInputChange,
+  onResetInputValue,
+  ...attributes
+}) {
   const [inputValue, setInputValue] = useState(userInputValue || '');
   const defaultValue = attributes.multiple ? [] : '';
   const autocompleteValue = userValue || defaultValue;

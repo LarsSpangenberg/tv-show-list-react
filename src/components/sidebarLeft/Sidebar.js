@@ -26,13 +26,11 @@ export default function Sidebar() {
   const isSidebarOpen = useSelector((state) => state.ui.isSidebarOpen);
 
   const closeSidebar = () => dispatch(uiActions.closeSidebar());
-  const setIgnoreSidebarClose = (isIgnored) => dispatch(uiActions.setIgnoreSidebarClose(isIgnored))
+  const setIgnoreSidebarClose = (isIgnored) => dispatch(uiActions.setIgnoreSidebarClose(isIgnored));
   const createNewTag = (tag) => dispatch(createTag(tag));
   const addTagFilter = (tag) => dispatch(filterActions.addTagFilter(tag));
   const removeTagFilter = (tag) => dispatch(filterActions.removeTagFilter(tag));
-  const setStatusFilter = (event) =>
-    dispatch(filterActions.setStatusFilter(event.target.value));
-
+  const setStatusFilter = (event) => dispatch(filterActions.setStatusFilter(event.target.value));
 
   return (
     <ClickAwayListener

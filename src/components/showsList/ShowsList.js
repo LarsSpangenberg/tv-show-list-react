@@ -34,7 +34,7 @@ import {
   getIsAnyFilterActive,
 } from 'store/appData/FiltersSlice';
 
-export default function ShowsTable() {
+export default function ShowsList() {
   const classes = useStyles();
   const dispatch = useDispatch();
 

@@ -11,12 +11,16 @@ import {
   DROPPED,
 } from 'constants/statusValues';
 
-
-export default function ShowsListItem(props) {
+export default function ShowsListItem({
+  i,
+  show,
+  show: { id, title, season, episode, status, note, tags },
+  isChecked,
+  handleClick,
+  handleCheck,
+  handleIncDec,
+}) {
   const classes = useStyles();
-
-  const { i, show, isChecked, handleClick, handleCheck, handleIncDec } = props;
-  const { id, title, season, episode, status, note, tags } = show;
 
   function handleShowClick(e) {
     const focusField = e.target.getAttribute('name');

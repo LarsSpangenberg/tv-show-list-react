@@ -4,10 +4,13 @@ import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBoxO
 
 import useStyles from './ShowsListHeadStyles';
 
-export default function ShowsListHead(props) {
+export default function ShowsListHead({
+  numSelected,
+  rowsCount,
+  handleCheckAll,
+}) {
   const classes = useStyles();
 
-  const { numSelected, rowsCount, handleCheckAll } = props;
   const isAllSelected = rowsCount > 0 && numSelected === rowsCount;
   const isAnySelected = numSelected > 0 && numSelected < rowsCount;
 

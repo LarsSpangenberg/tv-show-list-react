@@ -4,10 +4,13 @@ import RemoveIcon from '@material-ui/icons/Remove';
 
 import useStyles from './NumberTableCellStyles';
 
-export default function NumberTableCell(props) {
+export default function NumberTableCell({
+  name,
+  handleIncDec,
+  children,
+  ...attributes
+}) {
   const classes = useStyles();
-
-  const { name, handleIncDec, ...attr } = props;
 
   function handleIncDecClick(isIncrementing, e) {
     e.stopPropagation();
@@ -15,7 +18,7 @@ export default function NumberTableCell(props) {
   }
 
   return (
-    <TableCell name={name} className={classes.root} align='center' {...attr}>
+    <TableCell name={name} className={classes.root} align='center' {...attributes}>
       <Box
         name={name}
         width={100}
@@ -31,7 +34,7 @@ export default function NumberTableCell(props) {
           <RemoveIcon fontSize='small' />
         </IconButton>
 
-        {props.children}
+        {children}
 
         <IconButton
           className={classes.button}

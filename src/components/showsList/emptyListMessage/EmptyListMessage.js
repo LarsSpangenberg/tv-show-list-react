@@ -2,9 +2,8 @@ import { Box, Typography } from '@material-ui/core';
 
 import useStyles from './EmptyListMessageStyles';
 
-export default function EmptyListMessage(props) {
+export default function EmptyListMessage({ isAnyFilterActive, handleClick }) {
   const classes = useStyles();
-  const { isAnyFilterActive, handleClick } = props;
 
   return (
     <Box

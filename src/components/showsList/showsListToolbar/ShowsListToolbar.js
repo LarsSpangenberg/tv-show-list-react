@@ -11,9 +11,13 @@ import FilterIcon from '@material-ui/icons/FilterList';
 
 import useStyles from './ShowsListToolbarStyles';
 
-export default function ShowsTable(props) {
+export default function ShowsTable({
+  numSelected,
+  isSidebarOpen,
+  handleDelete,
+  handleFilterClick,
+}) {
   const classes = useStyles();
-  const { numSelected, isSidebarOpen, handleDelete, handleFilterClick } = props;
 
   return (
     <Toolbar className={classes.toolbar}>
