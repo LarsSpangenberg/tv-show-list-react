@@ -19,10 +19,12 @@ export const showDetailsSlice = createSlice({
   name: 'showDetails',
   initialState: defaultState,
   reducers: {
-    createNewShow() {
+    createNewShow(_, action) {
+      const tags = action.payload ? [...action.payload] : [];
       return {
         ...defaultState,
         id: randomID(),
+        tags,
         isNew: true,
         focusField: 'title',
       };

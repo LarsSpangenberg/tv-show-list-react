@@ -41,6 +41,7 @@ export default function ShowsList() {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
   const shows = useSelector((state) => state.shows);
+  const tagFilters = useSelector((state) => state.filters.tags);
   const filteredShows = useSelector((state) => getFilteredShows(state));
   const isAnyFilterActive = useSelector((state) => getIsAnyFilterActive(state));
   const checkedItemIds = useSelector((state) => getCheckedItemIds(state));
@@ -52,7 +53,7 @@ export default function ShowsList() {
   const openDetails = () => setIsDetailsOpen(true);
   const closeDetails = () => setIsDetailsOpen(false);
 
-  const createNewShow = () => dispatch(detailsActions.createNewShow());
+  const createNewShow = (tags) => dispatch(detailsActions.createNewShow(tags));
   const selectShow = (show) => dispatch(detailsActions.selectShow(show));
   const handleItemCheck = (payload) => dispatch(toggleCheck(payload));
   const handleCheckAll = () => dispatch(toggleCheckAll(shows.length));
@@ -65,7 +66,7 @@ export default function ShowsList() {
   }
 
   function handleCreateNewShowClick() {
-    createNewShow();
+    createNewShow(tagFilters);
     openDetails();
   }
 

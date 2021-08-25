@@ -11,6 +11,7 @@ import FilterIcon from '@material-ui/icons/FilterList';
 
 import useStyles from './ShowsListToolbarStyles';
 
+// TODO: add clear filters option
 export default function ShowsTable({
   numSelected,
   isSidebarOpen,
