@@ -11,12 +11,6 @@ export const user = {
       note: 'finished latest episode',
       status: 'completed',
       tags: ['Marvel', 'Disney+', 'Favorites'],
-      data: {
-        availableSeasons: 2,
-        thumbnail: 'url',
-        description: 'lots of words',
-        lastEpisode: { number: 13 },
-      },
     },
 
     {
@@ -27,21 +21,6 @@ export const user = {
       note: 'finished latest episode',
       status: 'watch later',
       tags: ['Superhero', 'Favorites', 'Disney+', 'Action'],
-      data: {
-        availableSeasons: 4,
-        thumbnail: 'url',
-        description: 'lots of words',
-        lastEpisode: {
-          number: 22,
-          title: 'episode title',
-          releaseDate: 'date',
-        },
-        nextEpisode: {
-          number: 23,
-          title: 'episode title',
-          releaseDate: 'date',
-        },
-      },
     },
 
     {
@@ -52,16 +31,6 @@ export const user = {
       note: 'finished latest episode',
       status: 'completed',
       tags: ['Superhero', 'Favorites'],
-      data: {
-        availableSeasons: 2,
-        thumbnail: 'url',
-        description: 'lots of words',
-        lastEpisode: {
-          number: 13,
-          title: 'episode title',
-          releaseDate: 'date',
-        },
-      },
     },
   ],
 };
