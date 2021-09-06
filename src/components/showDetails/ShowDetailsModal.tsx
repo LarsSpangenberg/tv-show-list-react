@@ -1,4 +1,4 @@
-import { FC, forwardRef } from 'react';
+import { FC, forwardRef, Ref } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import {
   Dialog,
@@ -12,10 +12,10 @@ import {
 import CloseIcon from '@material-ui/icons/Close';
 
 import ShowDetailsForm from './showDetailsForm/ShowDetailsForm';
+import useStyles from './ShowDetailsModalStyles';
 
 import { RootState } from 'store/store';
-
-import useStyles from './ShowDetailsModalStyles';
+import { TransitionProps } from '@material-ui/core/transitions';
 
 import * as actions from 'store/userData/ShowsSlice';
 import {
@@ -25,8 +25,9 @@ import {
 } from 'store/userData/ShowDetailsSlice';
 import { createTag } from 'store/userData/TagsSlice';
 
-
-// TODO: const Transition = forwardRef((props, ref) => <Slide ref={ref} {...props} />);
+const Transition = forwardRef((props: TransitionProps, ref: Ref<unknown>) => (
+  <Slide ref={ref} {...props} />
+));
 
 interface ShowDetailsModalProps {
   open: boolean;
@@ -73,7 +74,7 @@ const ShowDetailsModal: FC<ShowDetailsModalProps> = ({ open, handleClose }) => {
       className={classes.root}
       open={open}
       onClose={closeModal}
-      // TransitionComponent={Transition}
+      TransitionComponent={Transition}
       maxWidth='sm'
       fullWidth
     >
