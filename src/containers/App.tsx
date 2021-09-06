@@ -1,6 +1,5 @@
 import { FC, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from 'store/store';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 
 import Header from 'components/header/Header';
 import ShowsList from 'components/showsList/ShowsList';
@@ -17,9 +16,9 @@ import { getEqualStatusValue } from 'constants/showStatus';
 
 const App: FC = () => {
   useStyles();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const shows = useSelector((state: RootState) => state.shows);
+  const shows = useAppSelector((state) => state.shows);
   
   useEffect(() => {
     const addShow = (show: Show) => dispatch(actions.addShow(show));

@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 import clsx from 'clsx';
 
 import {
@@ -18,14 +18,17 @@ import ShowsListItem from 'components/showsList/showsListItem/ShowsListItem';
 import ShowDetailsModal from 'components/showDetails/ShowDetailsModal';
 import EmptyListMessage from './emptyListMessage/EmptyListMessage';
 
-import { RootState } from 'store/store';
 import { ShowAndFocusfield } from 'store/userData/ShowDetailsSlice';
 
 import useStyles from './ShowsListStyles';
 
 import * as uiActions from 'store/appData/UiSlice';
 import * as detailsActions from 'store/userData/ShowDetailsSlice';
-import { updateSeasonOrEpisode, deleteShows, IncDecDto } from 'store/userData/ShowsSlice';
+import {
+  updateSeasonOrEpisode,
+  deleteShows,
+  IncDecDto,
+} from 'store/userData/ShowsSlice';
 import {
   toggleCheck,
   toggleCheckAll,
@@ -40,28 +43,24 @@ import {
 
 const ShowsList: FC = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
-  const shows = useSelector((state: RootState) => state.shows);
-  const tagFilters = useSelector((state: RootState) => state.filters.tags);
-  const { isSidebarOpen } = useSelector((state: RootState) => state.ui);
+  const shows = useAppSelector((state) => state.shows);
+  const tagFilters = useAppSelector((state) => state.filters.tags);
+  const { isSidebarOpen } = useAppSelector((state) => state.ui);
 
-  const filteredShows = useSelector((state: RootState) =>
-    getFilteredShows(state)
-  );
+  const filteredShows = useAppSelector((state) => getFilteredShows(state));
 
-  const isAnyFilterActive = useSelector((state: RootState) =>
+  const isAnyFilterActive = useAppSelector((state) =>
     getIsAnyFilterActive(state)
   );
 
-  const checkedItemIds = useSelector((state: RootState) =>
-    getCheckedItemIds(state)
-  );
+  const checkedItemIds = useAppSelector((state) => getCheckedItemIds(state));
 
-  const { numChecked, checked: selectedShows } = useSelector(
-    (state: RootState) => state.checkedListItems
+  const { numChecked, checked: selectedShows } = useAppSelector(
+    (state) => state.checkedListItems
   );
 
   const openDetails = () => setIsDetailsOpen(true);

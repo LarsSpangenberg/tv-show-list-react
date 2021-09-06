@@ -14,7 +14,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import ShowDetailsForm from './showDetailsForm/ShowDetailsForm';
 import useStyles from './ShowDetailsModalStyles';
 
-import { RootState } from 'store/store';
 import { TransitionProps } from '@material-ui/core/transitions';
 
 import * as actions from 'store/userData/ShowsSlice';
@@ -41,7 +40,7 @@ const ShowDetailsModal: FC<ShowDetailsModalProps> = ({ open, handleClose }) => {
   const { show, isNew, focusField } = useAppSelector(
     (state) => state.showDetails
   );
-  const allTags = useAppSelector((state: RootState) => state.tags);
+  const allTags = useAppSelector((state) => state.tags);
 
   const saveNewShow = () => dispatch(actions.addShow(show));
   const updateShow = () => dispatch(actions.updateShow(show));

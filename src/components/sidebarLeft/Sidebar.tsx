@@ -1,5 +1,5 @@
 import { FC, ChangeEvent } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 
 import {
   ClickAwayListener,
@@ -13,7 +13,6 @@ import useStyles from './SidebarStyles';
 import TagFilters from './tagFilters/TagFilters';
 import Status, { getEqualStatusValue } from 'constants/showStatus';
 
-import { RootState } from 'store/store';
 import { createTag } from 'store/userData/TagsSlice';
 import * as filterActions from 'store/appData/FiltersSlice';
 import * as uiActions from 'store/appData/UiSlice';
@@ -22,25 +21,16 @@ import * as uiActions from 'store/appData/UiSlice';
 
 const Sidebar: FC = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const tags = useSelector((state: RootState) => state.tags);
-
-  const activeStatusFilter = useSelector(
-    (state: RootState) => state.filters.status
-  );
-  
-  const activeTagFilters = useSelector(
-    (state: RootState) => state.filters.tags
-  );
-  
-  const isSidebarOpen = useSelector(
-    (state: RootState) => state.ui.isSidebarOpen
-  );
+  const tags = useAppSelector((state) => state.tags);
+  const activeStatusFilter = useAppSelector((state) => state.filters.status);
+  const activeTagFilters = useAppSelector((state) => state.filters.tags);
+  const isSidebarOpen = useAppSelector((state) => state.ui.isSidebarOpen);
 
   const closeSidebar = () => dispatch(uiActions.closeSidebar());
   const createNewTag = (tag: string) => dispatch(createTag(tag));
-  
+
   function setIgnoreSidebarClose(isIgnored: boolean) {
     dispatch(uiActions.setIgnoreSidebarClose(isIgnored));
   }
