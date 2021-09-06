@@ -27,10 +27,7 @@ const App: FC = () => {
 
     user.shows.forEach((show) => {
       const i = shows.findIndex((el) => el.id === show.id);
-
       if (i === -1) {
-        console.log(show);
-
         show.tags.forEach((tag) => createTag(tag));
         addShow({...show, status: getEqualStatusValue(show.status)});
       }
