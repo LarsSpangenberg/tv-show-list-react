@@ -46,8 +46,8 @@ const ShowDetailsModal: FC<ShowDetailsModalProps> = ({ open, handleClose }) => {
   const saveNewShow = () => dispatch(actions.addShow(show));
   const updateShow = () => dispatch(actions.updateShow(show));
   const deleteShow = () => dispatch(actions.deleteShow(show.id));
-  const createNewTag = (tag: string) => dispatch(createTag(tag));
   const handleReset = () => dispatch(resetSelection());
+  const createNewTag = (tag: string) => dispatch(createTag(tag));
 
   function handleDetailChange(key: string, value: DetailsFormInputValue) {
     dispatch(updateSelection({ key, value }));
