@@ -42,20 +42,15 @@ const ShowsListToolbar: FC<ShowsListToolbarProps> = ({
         </Tooltip>
       )}
 
-      {/* 
-        FIXME: Material-UI: You are providing a disabled `button` child to the Tooltip component.
-        A disabled element does not fire events.
-        Tooltip needs to listen to the child element's events to display the title.
-
-        Add a simple wrapper element, such as a `span`. 
-      */}
       <Tooltip title='Filters'>
-        <IconButton onClick={handleFilterClick} disabled={isSidebarOpen}>
-          <FilterIcon />
-        </IconButton>
+        <span>
+          <IconButton onClick={handleFilterClick} disabled={isSidebarOpen}>
+            <FilterIcon />
+          </IconButton>
+        </span>
       </Tooltip>
     </Toolbar>
   );
-}
+};
 
 export default ShowsListToolbar;
