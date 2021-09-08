@@ -3,7 +3,7 @@ import { TableCell, Box, IconButton } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 
-import { Show } from 'store/userData/ShowDetailsSlice';
+import { Show } from 'store/user-data/ShowDetailsSlice';
 
 import useStyles from './NumberTableCellStyles';
 

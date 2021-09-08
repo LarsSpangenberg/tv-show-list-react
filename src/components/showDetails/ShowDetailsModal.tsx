@@ -16,13 +16,13 @@ import useStyles from './ShowDetailsModalStyles';
 
 import { TransitionProps } from '@material-ui/core/transitions';
 
-import * as actions from 'store/userData/ShowsSlice';
+import * as actions from 'store/user-data/ShowsSlice';
 import {
   updateSelection,
   resetSelection,
   DetailsFormInputValue,
-} from 'store/userData/ShowDetailsSlice';
-import { createTag } from 'store/userData/TagsSlice';
+} from 'store/user-data/ShowDetailsSlice';
+import { createTag } from 'store/user-data/TagsSlice';
 
 const Transition = forwardRef((props: TransitionProps, ref: Ref<unknown>) => (
   <Slide ref={ref} {...props} />

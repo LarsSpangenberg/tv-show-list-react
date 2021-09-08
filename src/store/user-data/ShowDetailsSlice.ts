@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import Status from 'constants/showStatus';
+import Status from 'constants/ShowStatus';
 import randomId from 'util/randomId';
 
 interface ShowDetailsState {

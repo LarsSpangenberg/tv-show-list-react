@@ -17,7 +17,7 @@ export const uiSlice = createSlice({
     openSidebar(state) {
       state.isSidebarOpen = true;
     },
-    closeSidebar(state) {
+    setSidebarClose(state) {
       if (state.isSidebarOpen && !state.ignoreSidebarClose) {
         state.isSidebarOpen = false;
       }
@@ -28,7 +28,8 @@ export const uiSlice = createSlice({
   },
 });
 
-export const { openSidebar, closeSidebar, setIgnoreSidebarClose } =
+export const { openSidebar, setSidebarClose, setIgnoreSidebarClose } =
   uiSlice.actions;
 
 export default uiSlice.reducer;
+

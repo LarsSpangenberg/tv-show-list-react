@@ -2,9 +2,9 @@ import { FC, ChangeEvent } from 'react';
 import { TableRow, TableCell, Checkbox } from '@material-ui/core';
 import NumberTableCell from './NumberTableCell';
 
-import { Show, ShowAndFocusfield } from 'store/userData/ShowDetailsSlice';
-import { CheckedItem } from 'store/appData/CheckedListItemsSlice';
-import { IncDecDto } from 'store/userData/ShowsSlice';
+import { Show, ShowAndFocusfield } from 'store/user-data/ShowDetailsSlice';
+import { CheckedItem } from 'store/app-data/CheckedListItemsSlice';
+import { IncDecDto } from 'store/user-data/ShowsSlice';
 
 import useStyles from './ShowsListItemStyles';
 
@@ -37,7 +37,7 @@ const ShowsListItem: FC<ShowsListItemProps> = ({
   }
 
   function handleCheckClick(e: ChangeEvent<HTMLInputElement>) {
-    handleCheck({ i, isChecked: e.target.checked });
+    handleCheck({ i, isChecked: e.target.checked, id });
   }
 
   function getFormattedTags() {

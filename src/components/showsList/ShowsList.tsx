@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import clsx from 'clsx';
 
@@ -18,55 +18,73 @@ import ShowsListItem from 'components/showsList/showsListItem/ShowsListItem';
 import ShowDetailsModal from 'components/showDetails/ShowDetailsModal';
 import EmptyListMessage from './emptyListMessage/EmptyListMessage';
 
-import { ShowAndFocusfield } from 'store/userData/ShowDetailsSlice';
+import { ShowAndFocusfield } from 'store/user-data/ShowDetailsSlice';
 
 import useStyles from './ShowsListStyles';
 
-import * as uiActions from 'store/appData/UiSlice';
-import * as detailsActions from 'store/userData/ShowDetailsSlice';
+import * as uiActions from 'store/app-data/UiSlice';
+import * as detailsActions from 'store/user-data/ShowDetailsSlice';
 import {
   updateSeasonOrEpisode,
   deleteShows,
   IncDecDto,
-} from 'store/userData/ShowsSlice';
+} from 'store/user-data/ShowsSlice';
 import {
   toggleCheck,
   toggleCheckAll,
   resetChecked,
-  getCheckedItemIds,
   CheckedItem,
-} from 'store/appData/CheckedListItemsSlice';
+  reevaluateChecked,
+} from 'store/app-data/CheckedListItemsSlice';
 import {
   getFilteredShows,
   getIsAnyFilterActive,
-} from 'store/appData/FiltersSlice';
+  resetAllFilters,
+} from 'store/app-data/FiltersSlice';
 
 const ShowsList: FC = () => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
 
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-
   const shows = useAppSelector((state) => state.shows);
   const tagFilters = useAppSelector((state) => state.filters.tags);
   const { isSidebarOpen } = useAppSelector((state) => state.ui);
-
   const filteredShows = useAppSelector((state) => getFilteredShows(state));
+
+  const checkedItemIds = useAppSelector(
+    (state) => state.checkedListItems.checkedIds
+  );
 
   const isAnyFilterActive = useAppSelector((state) =>
     getIsAnyFilterActive(state)
   );
 
-  const checkedItemIds = useAppSelector((state) => getCheckedItemIds(state));
-
   const { numChecked, checked: selectedShows } = useAppSelector(
     (state) => state.checkedListItems
   );
 
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [wasSidebarOpen, setWasSidebarOpen] = useState(isSidebarOpen);
+
+  // used as alternative to prevent sidebar from closing when clicking buttons (resetFilters)
+  useEffect(() => {
+    if (isSidebarOpen !== wasSidebarOpen) {
+      setTimeout(() => {
+        setWasSidebarOpen(isSidebarOpen);
+      }, 500);
+    }
+  }, [isSidebarOpen]);
+
+  // reset checkboxes when a new filter is selected or removed
+  useEffect(() => {
+    resetCheckedItems();
+  }, [filteredShows]);
+
   const openDetails = () => setIsDetailsOpen(true);
   const closeDetails = () => setIsDetailsOpen(false);
-  const handleCheckAll = () => dispatch(toggleCheckAll(shows.length));
+  const handleCheckAll = () => dispatch(toggleCheckAll(shows));
   const openSidebar = () => dispatch(uiActions.openSidebar());
+  const resetCheckedItems = () => dispatch(reevaluateChecked(filteredShows));
 
   const createNewShow = (tags: string[]) =>
     dispatch(detailsActions.createNewShow(tags));
@@ -79,6 +97,11 @@ const ShowsList: FC = () => {
 
   const handleIncDec = (payload: IncDecDto) =>
     dispatch(updateSeasonOrEpisode(payload));
+
+  function resetFilters() {
+    if (wasSidebarOpen) openSidebar();
+    dispatch(resetAllFilters());
+  }
 
   function handleShowClick(payload: ShowAndFocusfield) {
     selectShow(payload);
@@ -107,8 +130,10 @@ const ShowsList: FC = () => {
           <ShowsListToolbar
             numSelected={numChecked}
             isSidebarOpen={isSidebarOpen}
+            isAnyFilterActive={isAnyFilterActive}
             handleDelete={handleDelete}
             handleFilterClick={openSidebar}
+            resetFilters={resetFilters}
           />
 
           <Table>

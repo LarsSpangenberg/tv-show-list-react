@@ -3,8 +3,8 @@ import { Grid, DialogContent, TextField, MenuItem } from '@material-ui/core';
 
 import TagInput from './TagInput';
 
-import Status from 'constants/showStatus';
-import { Show, DetailsFormInputValue } from 'store/userData/ShowDetailsSlice';
+import Status from 'constants/ShowStatus';
+import { Show, DetailsFormInputValue } from 'store/user-data/ShowDetailsSlice';
 
 import useStyles from './ShowDetailsFormStyles';
 

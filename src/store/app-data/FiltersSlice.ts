@@ -1,8 +1,8 @@
-import { RootState } from './../store';
+import { RootState } from '../store';
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import Status from 'constants/showStatus';
+import Status from 'constants/ShowStatus';
 
-import { showsState } from 'store/userData/ShowsSlice';
+import { showsState } from 'store/user-data/ShowsSlice';
 
 interface FiltersState {
   status: Status;
@@ -32,11 +32,18 @@ export const filtersSlice = createSlice({
         };
       }
     },
+    resetAllFilters() {
+      return initialState;
+    },
   },
 });
 
-export const { setStatusFilter, addTagFilter, removeTagFilter } =
-  filtersSlice.actions;
+export const {
+  setStatusFilter,
+  addTagFilter,
+  removeTagFilter,
+  resetAllFilters,
+} = filtersSlice.actions;
 
 export default filtersSlice.reducer;
 

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, MouseEvent } from 'react';
 import {
   Toolbar,
   Box,
@@ -9,22 +9,27 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import FilterIcon from '@material-ui/icons/FilterList';
+import ResetFiltersIcon from '@material-ui/icons/ClearAll';
 
 import useStyles from './ShowsListToolbarStyles';
 
 interface ShowsListToolbarProps {
   numSelected: number;
   isSidebarOpen: boolean;
+  isAnyFilterActive: boolean;
   handleDelete: () => void;
   handleFilterClick: () => void;
+  resetFilters: (e: MouseEvent<HTMLButtonElement>) => void;
 }
 
 // TODO: add clear filters option
 const ShowsListToolbar: FC<ShowsListToolbarProps> = ({
   numSelected,
   isSidebarOpen,
+  isAnyFilterActive,
   handleDelete,
   handleFilterClick,
+  resetFilters,
 }) => {
   const classes = useStyles();
 
@@ -42,13 +47,21 @@ const ShowsListToolbar: FC<ShowsListToolbarProps> = ({
         </Tooltip>
       )}
 
-      <Tooltip title='Filters'>
-        <span>
-          <IconButton onClick={handleFilterClick} disabled={isSidebarOpen}>
+      {isAnyFilterActive && (
+        <Tooltip title='Reset Filters'>
+          <IconButton onClick={resetFilters} name='reset-filters'>
+            <ResetFiltersIcon />
+          </IconButton>
+        </Tooltip>
+      )}
+      
+      {!isSidebarOpen && (
+        <Tooltip title='Filter Menu'>
+          <IconButton onClick={handleFilterClick}>
             <FilterIcon />
           </IconButton>
-        </span>
-      </Tooltip>
+        </Tooltip>
+      )}
     </Toolbar>
   );
 };

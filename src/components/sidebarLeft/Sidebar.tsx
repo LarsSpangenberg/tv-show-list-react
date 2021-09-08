@@ -1,4 +1,4 @@
-import { FC, ChangeEvent } from 'react';
+import { FC, ChangeEvent, MouseEvent, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 
 import {
@@ -7,15 +7,19 @@ import {
   Box,
   TextField,
   MenuItem,
+  IconButton,
+  Typography,
+  Button,
 } from '@material-ui/core';
 
 import useStyles from './SidebarStyles';
 import TagFilters from './tagFilters/TagFilters';
-import Status, { getEqualStatusValue } from 'constants/showStatus';
+import Status, { getEqualStatusValue } from 'constants/ShowStatus';
 
-import { createTag } from 'store/userData/TagsSlice';
-import * as filterActions from 'store/appData/FiltersSlice';
-import * as uiActions from 'store/appData/UiSlice';
+import { createTag } from 'store/user-data/TagsSlice';
+import * as filterActions from 'store/app-data/FiltersSlice';
+import * as uiActions from 'store/app-data/UiSlice';
+import { reevaluateChecked } from 'store/app-data/CheckedListItemsSlice';
 
 // import * as status from 'data/constants/statusValues';
 
@@ -26,10 +30,16 @@ const Sidebar: FC = () => {
   const tags = useAppSelector((state) => state.tags);
   const activeStatusFilter = useAppSelector((state) => state.filters.status);
   const activeTagFilters = useAppSelector((state) => state.filters.tags);
+  const isAnyFilterActive = useAppSelector((state) => filterActions.getIsAnyFilterActive(state))
   const isSidebarOpen = useAppSelector((state) => state.ui.isSidebarOpen);
 
-  const closeSidebar = () => dispatch(uiActions.closeSidebar());
+
   const createNewTag = (tag: string) => dispatch(createTag(tag));
+  const resetFilters = () => dispatch(filterActions.resetAllFilters());
+
+  function closeSidebar() {
+    dispatch(uiActions.setSidebarClose());
+  }
 
   function setIgnoreSidebarClose(isIgnored: boolean) {
     dispatch(uiActions.setIgnoreSidebarClose(isIgnored));
@@ -91,6 +101,17 @@ const Sidebar: FC = () => {
             isSidebarOpen={isSidebarOpen}
             setIgnoreSidebarClose={setIgnoreSidebarClose}
           />
+
+          {isAnyFilterActive && (
+          <Button
+            className={classes.clearButton}
+            onClick={resetFilters}
+            size='small'
+            fullWidth
+          >
+            Reset All Filters
+          </Button>
+          )}
         </Box>
       </Drawer>
     </ClickAwayListener>

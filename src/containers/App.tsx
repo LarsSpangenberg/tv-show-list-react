@@ -7,12 +7,12 @@ import Sidebar from 'components/sidebarLeft/Sidebar';
 
 import useStyles from './AppStyles';
 
-import * as actions from 'store/userData/ShowsSlice';
-import * as tagActions from 'store/userData/TagsSlice';
+import * as actions from 'store/user-data/ShowsSlice';
+import * as tagActions from 'store/user-data/TagsSlice';
 
 import { user } from 'assets/mock-user.js';
-import { Show } from 'store/userData/ShowDetailsSlice';
-import { getEqualStatusValue } from 'constants/showStatus';
+import { Show } from 'store/user-data/ShowDetailsSlice';
+import { getEqualStatusValue } from 'constants/ShowStatus';
 
 const App: FC = () => {
   useStyles();

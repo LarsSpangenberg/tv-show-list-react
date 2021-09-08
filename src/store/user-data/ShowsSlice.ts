@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'store/store';
 
 import { Show } from './ShowDetailsSlice';
-import { getEqualStatusValue } from 'constants/showStatus';
+import { getEqualStatusValue } from 'constants/ShowStatus';
 
 const initialState: Show[] = [];
 

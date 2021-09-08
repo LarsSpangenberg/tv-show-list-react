@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import uiReducer from './appData/UiSlice';
-import checkedListItemsReducer from './appData/CheckedListItemsSlice';
-import filtersReducer from './appData/FiltersSlice';
+import uiReducer from './app-data/UiSlice';
+import checkedListItemsReducer from './app-data/CheckedListItemsSlice';
+import filtersReducer from './app-data/FiltersSlice';
 
-import showsReducer from './userData/ShowsSlice';
-import showDetailsReducer from './userData/ShowDetailsSlice';
-import tagsReducer from './userData/TagsSlice';
+import showsReducer from './user-data/ShowsSlice';
+import showDetailsReducer from './user-data/ShowDetailsSlice';
+import tagsReducer from './user-data/TagsSlice';
 
 const store = configureStore({
   reducer: {
