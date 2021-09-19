@@ -73,7 +73,6 @@ const TagFilters: FC<TagFiltersProps> = ({
         onTagSelect={handleSelectOption}
         onCreateNewTagSelect={handleSelectCreateNewOption}
         onInputChange={handleTagInputChange}
-        // onResetInputValue={resetTagInputValue}
         onOpen={handleOptionsOpen}
         onClose={handleOptionsClose}
         openOnFocus
@@ -94,7 +93,13 @@ const TagFilters: FC<TagFiltersProps> = ({
         )}
       />
 
-      <Box component='ul' px={1}>
+      <Box
+        className={classes.tagsContainer}
+        component='ul'
+        px={1}
+        pb={1}
+        my={0}
+      >
         {activeTagFilters &&
           activeTagFilters.map((tag, i) => (
             <Chip

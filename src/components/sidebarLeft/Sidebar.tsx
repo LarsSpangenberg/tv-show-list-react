@@ -1,4 +1,4 @@
-import { FC, ChangeEvent, MouseEvent, useEffect } from 'react';
+import { FC, ChangeEvent } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 
 import {
@@ -7,8 +7,6 @@ import {
   Box,
   TextField,
   MenuItem,
-  IconButton,
-  Typography,
   Button,
 } from '@material-ui/core';
 
@@ -19,20 +17,18 @@ import Status, { getEqualStatusValue } from 'constants/ShowStatus';
 import { createTag } from 'store/user-data/TagsSlice';
 import * as filterActions from 'store/app-data/FiltersSlice';
 import * as uiActions from 'store/app-data/UiSlice';
-import { reevaluateChecked } from 'store/app-data/CheckedListItemsSlice';
-
-// import * as status from 'data/constants/statusValues';
 
 const Sidebar: FC = () => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
 
   const tags = useAppSelector((state) => state.tags);
+  const isSidebarOpen = useAppSelector((state) => state.ui.isSidebarOpen);
   const activeStatusFilter = useAppSelector((state) => state.filters.status);
   const activeTagFilters = useAppSelector((state) => state.filters.tags);
-  const isAnyFilterActive = useAppSelector((state) => filterActions.getIsAnyFilterActive(state))
-  const isSidebarOpen = useAppSelector((state) => state.ui.isSidebarOpen);
-
+  const isAnyFilterActive = useAppSelector((state) =>
+    filterActions.getIsAnyFilterActive(state)
+  );
 
   const createNewTag = (tag: string) => dispatch(createTag(tag));
   const resetFilters = () => dispatch(filterActions.resetAllFilters());
@@ -73,7 +69,13 @@ const Sidebar: FC = () => {
       >
         <div className={classes.logoBg} />
 
-        <Box pt={2}>
+        <Box
+          className={classes.sidebarContent}
+          display='flex'
+          flexDirection='column'
+          flex='1'
+          pt={2}
+        >
           <TextField
             select
             label='Filter by Status'
@@ -103,14 +105,14 @@ const Sidebar: FC = () => {
           />
 
           {isAnyFilterActive && (
-          <Button
-            className={classes.clearButton}
-            onClick={resetFilters}
-            size='small'
-            fullWidth
-          >
-            Reset All Filters
-          </Button>
+            <Button
+              className={classes.clearButton}
+              onClick={resetFilters}
+              size='small'
+              fullWidth
+            >
+              Reset All Filters
+            </Button>
           )}
         </Box>
       </Drawer>

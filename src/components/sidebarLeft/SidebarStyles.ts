@@ -7,17 +7,24 @@ export default makeStyles((theme) => {
       maxWidth: sidebarWidth,
       overflow: 'visible'
     },
+    sidebarContent: {
+      height: 0,
+    },
     logoBg: {
       backgroundColor: theme.palette.secondary.light,
-      height: headerHeight,
-      width: sidebarWidth,
+      minHeight: headerHeight,
+      minWidth: sidebarWidth,
     },
     inputSpacing: {
       paddingLeft: theme.spacing(1),
     },
     clearButton: {
-      color: theme.palette.grey[400],
-      // textTransform: 'none',
+      color: theme.palette.grey[500],
+      borderTop: '1px solid',
+      borderColor: theme.palette.grey[300],
+      paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
+      borderRadius: 0,
     }
   };
 });

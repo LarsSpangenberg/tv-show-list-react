@@ -6,7 +6,7 @@ export default makeStyles((theme) => ({
       width: theme.spacing(1),
     },
     '*::-webkit-scrollbar-thumb': {
-      backgroundColor: theme.palette.grey['A100'],
+      backgroundColor: theme.palette.grey[300],
     },
     ul: {
       listStyleType: 'none',

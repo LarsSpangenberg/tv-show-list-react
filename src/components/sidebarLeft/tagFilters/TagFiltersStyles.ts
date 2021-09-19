@@ -7,6 +7,10 @@ export default makeStyles((theme) => ({
   inputSpacing: {
     paddingLeft: theme.spacing(1),
   },
+  tagsContainer: {
+    overflowY: 'auto',
+    flex: '1',
+  },
   filterChip: {
     marginTop: theme.spacing(1),
     width: '100%',

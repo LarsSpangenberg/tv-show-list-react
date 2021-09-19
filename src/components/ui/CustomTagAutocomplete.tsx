@@ -127,7 +127,8 @@ function CustomTagAutocomplete<
   /* 
     When the 'value' prop is set on Autocomplete, thus making it controlled, the inputValue prop on 
     filterOption's 'state' param always returns an empty string. Once the value prop is removed it works 
-    fine, however this messes with the Autocomplete state and breaks the clear icon. 
+    fine. The value is set in the Sidebar componenet because the options are managed in a seperate component and
+    the value doesn't really match with the input.
 
     Quick fix was to add the input value to the state manually so the filter gets the right values to work with.
 
