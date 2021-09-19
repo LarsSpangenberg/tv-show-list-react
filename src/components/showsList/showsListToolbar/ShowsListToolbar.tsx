@@ -22,7 +22,6 @@ interface ShowsListToolbarProps {
   resetFilters: (e: MouseEvent<HTMLButtonElement>) => void;
 }
 
-// TODO: add clear filters option
 const ShowsListToolbar: FC<ShowsListToolbarProps> = ({
   numSelected,
   isSidebarOpen,
