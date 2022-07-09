@@ -12,7 +12,6 @@ import { Tag } from 'store/models/Tag';
 import { useAppSelector } from 'store/hooks';
 import { getTagFilters } from 'store/app-data/FiltersSlice';
 import { RootState } from 'store/store';
-// import CustomAutocomplete from 'components/ui/CustomTagAutocomplete';
 
 interface NewOption {
   label: string;

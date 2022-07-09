@@ -12,12 +12,12 @@ import {
 } from '@mui/material';
 
 import TagFilters from './TagFilters';
-import Status, { getEqualStatusValue } from 'store/models/ShowStatus';
 
-// import { createTag } from 'store/user-data/TagsSlice';
+import { useAddTagMutation, useGetAllTagsQuery } from 'store/api';
 import * as filterActions from 'store/app-data/FiltersSlice';
 import * as uiActions from 'store/app-data/UiSlice';
-import { useAddTagMutation, useGetAllTagsQuery } from 'store/api';
+
+import Status, { getEqualStatusValue } from 'store/models/ShowStatus';
 import { Tag } from 'store/models/Tag';
 
 const inputSpacing = { pl: 1 };
@@ -114,8 +114,6 @@ const Sidebar: FC = () => {
 
           <TagFilters
             tags={getTagsSuccess ? tags : []}
-            // activeTagFilters={activeTagFilters}
-            // inactiveTagFilters={inactiveTagFilters}
             createNewTag={createNewTag}
             addTagFilter={addTagFilter}
             removeTagFilter={removeTagFilter}

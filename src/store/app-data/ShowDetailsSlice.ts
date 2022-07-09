@@ -67,7 +67,6 @@ export const showDetailsSlice = createSlice({
 // util
 function createNewShowData(tags?: string[]): NewShowData {
   return {
-    // id: randomId(),
     title: '',
     season: 1,
     episode: 1,

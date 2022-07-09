@@ -111,21 +111,11 @@ const api = createApi({
       },
       invalidatesTags: ['SHOW'],
     }),
-
     // Tags
     getAllTags: builder.query<Tag[], void>({
       query: () => ({
         url: `${userId}/tags`,
       }),
-      // transformResponse: (res: Tag[]) => {
-      //   const normalizedTags = {} as NormalizedTags;
-
-      //   res.forEach((tag) => {
-      //     normalizedTags[tag.id] = tag.name;
-      //   });
-
-      //   return normalizedTags;
-      // },
       providesTags: ['TAG'],
     }),
     addTag: builder.mutation<Tag, string>({

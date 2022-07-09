@@ -8,7 +8,6 @@ import {
 import { Tag } from 'store/models/Tag';
 import { useAppSelector } from 'store/hooks';
 import { getTagOptions } from 'store/app-data/ShowDetailsSlice';
-// import CustomTagAutocomplete from 'components/ui/CustomTagAutocomplete';
 
 interface NewOption {
   label: string;

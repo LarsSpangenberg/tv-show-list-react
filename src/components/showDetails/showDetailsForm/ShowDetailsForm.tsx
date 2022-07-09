@@ -10,8 +10,11 @@ import {
 
 import TagInput from './TagInput';
 
+import {
+  DetailsFormInputValue,
+  ShowDetailsData,
+} from 'store/app-data/ShowDetailsSlice';
 import Status from 'store/models/ShowStatus';
-import { DetailsFormInputValue, ShowDetailsData } from 'store/app-data/ShowDetailsSlice';
 import { Tag } from 'store/models/Tag';
 
 interface ShowDetailsFormProps {

@@ -1,4 +1,4 @@
-import { FC, forwardRef, Ref, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import {
   Dialog,
@@ -6,7 +6,6 @@ import {
   DialogActions,
   Typography,
   IconButton,
-  // Slide,
   Button,
   Box,
 } from '@mui/material';
@@ -14,9 +13,6 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import ShowDetailsForm from './showDetailsForm/ShowDetailsForm';
 
-// import { TransitionProps } from '@mui/material/transitions';
-
-// import * as actions from 'store/user-data/ShowsSlice';
 import {
   updateSelection,
   resetSelection as resetShowDetailsForm,
@@ -29,10 +25,6 @@ import {
   useGetAllTagsQuery,
   useUpdateShowMutation,
 } from 'store/api';
-
-// const Transition = forwardRef((props: TransitionProps, ref: Ref<unknown>) => (
-//   <Slide ref={ref} {...props} />
-// ));
 
 interface ShowDetailsModalProps {
   open: boolean;
@@ -101,7 +93,6 @@ const ShowDetailsModal: FC<ShowDetailsModalProps> = ({ open, handleClose }) => {
     <Dialog
       open={open}
       onClose={closeModal}
-      // TransitionComponent={Transition}
       maxWidth='sm'
       fullWidth
       sx={{ overflow: 'hidden' }}
