@@ -4,19 +4,19 @@ import uiReducer from './app-data/UiSlice';
 import checkedListItemsReducer from './app-data/CheckedListItemsSlice';
 import filtersReducer from './app-data/FiltersSlice';
 
-import showsReducer from './user-data/ShowsSlice';
-import showDetailsReducer from './user-data/ShowDetailsSlice';
-import tagsReducer from './user-data/TagsSlice';
+import showDetailsReducer from './app-data/ShowDetailsSlice';
+import api from './api';
 
 const store = configureStore({
   reducer: {
-    shows: showsReducer,
+    [api.reducerPath]: api.reducer,
     showDetails: showDetailsReducer,
-    tags: tagsReducer,
     ui: uiReducer,
     checkedListItems: checkedListItemsReducer,
     filters: filtersReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(api.middleware),
 });
 
 export default store;

@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import clsx from 'clsx';
 
 import {
   Container,
@@ -9,26 +8,22 @@ import {
   TableContainer,
   TableBody,
   Fab,
-} from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
-import ShowsListToolbar from 'components/showsList/showsListToolbar/ShowsListToolbar';
-import ShowsListHead from 'components/showsList/showsListHead/ShowsListHead';
+import ShowsListToolbar from 'components/showsList/ShowsListToolbar';
+import ShowsListHead from 'components/showsList/ShowsListHead';
 import ShowsListItem from 'components/showsList/showsListItem/ShowsListItem';
 import ShowDetailsModal from 'components/showDetails/ShowDetailsModal';
-import EmptyListMessage from './emptyListMessage/EmptyListMessage';
+import EmptyListMessage from './EmptyListMessage';
 
-import { ShowAndFocusfield } from 'store/user-data/ShowDetailsSlice';
-
-import useStyles from './ShowsListStyles';
+import { ShowAndFocusfield } from 'store/app-data/ShowDetailsSlice';
 
 import * as uiActions from 'store/app-data/UiSlice';
-import * as detailsActions from 'store/user-data/ShowDetailsSlice';
 import {
-  updateSeasonOrEpisode,
-  deleteShows,
-  IncDecDto,
-} from 'store/user-data/ShowsSlice';
+  createNewShow as createNew,
+  selectShow as select,
+} from 'store/app-data/ShowDetailsSlice';
 import {
   toggleCheck,
   toggleCheckAll,
@@ -37,19 +32,30 @@ import {
   reevaluateChecked,
 } from 'store/app-data/CheckedListItemsSlice';
 import {
-  getFilteredShows,
+  // getFilteredShows,
   getIsAnyFilterActive,
   resetAllFilters,
+  // getAllFilters
 } from 'store/app-data/FiltersSlice';
+import {
+  useDeleteShowsMutation,
+  useGetAllShowsQuery,
+  useUpdateShowFieldMutation,
+} from 'store/api';
+import { Show } from 'store/models/Show';
 
 const ShowsList: FC = () => {
-  const classes = useStyles();
   const dispatch = useAppDispatch();
 
-  const shows = useAppSelector((state) => state.shows);
-  const tagFilters = useAppSelector((state) => state.filters.tags);
+  const tagFilters = useAppSelector((state) => state.filters.selectedTagIds);
+  const statusFilter = useAppSelector((state) => state.filters.status);
   const { isSidebarOpen } = useAppSelector((state) => state.ui);
-  const filteredShows = useAppSelector((state) => getFilteredShows(state));
+
+  // TODO: add error handling and a loading spinner
+  const { data: shows } = useGetAllShowsQuery({
+    statusFilter,
+    tagFilters,
+  });
 
   const checkedItemIds = useAppSelector(
     (state) => state.checkedListItems.checkedIds
@@ -66,7 +72,7 @@ const ShowsList: FC = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [wasSidebarOpen, setWasSidebarOpen] = useState(isSidebarOpen);
 
-  // used as alternative to prevent sidebar from closing when clicking buttons (resetFilters)
+  // prevent sidebar from closing when clicking buttons (resetFilters)
   useEffect(() => {
     if (isSidebarOpen !== wasSidebarOpen) {
       setTimeout(() => {
@@ -77,26 +83,27 @@ const ShowsList: FC = () => {
 
   // reset checkboxes when a new filter is selected or removed
   useEffect(() => {
-    resetCheckedItems();
-  }, [filteredShows]);
+    if (shows) {
+      resetCheckedItems(shows);
+    }
+  }, [tagFilters, statusFilter, shows]);
 
+  const [deleteShows] = useDeleteShowsMutation();
+  const [updateShowField] = useUpdateShowFieldMutation();
+  const createNewShow = (tags: string[]) => dispatch(createNew(tags));
+  const selectShow = (payload: ShowAndFocusfield) => dispatch(select(payload));
   const openDetails = () => setIsDetailsOpen(true);
   const closeDetails = () => setIsDetailsOpen(false);
-  const handleCheckAll = () => dispatch(toggleCheckAll(shows));
   const openSidebar = () => dispatch(uiActions.openSidebar());
-  const resetCheckedItems = () => dispatch(reevaluateChecked(filteredShows));
 
-  const createNewShow = (tags: string[]) =>
-    dispatch(detailsActions.createNewShow(tags));
+  const handleCheckAll = () =>
+    dispatch(toggleCheckAll((shows || []) as Show[]));
 
-  const selectShow = (payload: ShowAndFocusfield) =>
-    dispatch(detailsActions.selectShow(payload));
+  const resetCheckedItems = (fetchedShows: Show[]) =>
+    dispatch(reevaluateChecked(fetchedShows));
 
   const handleItemCheck = (payload: CheckedItem) =>
     dispatch(toggleCheck(payload));
-
-  const handleIncDec = (payload: IncDecDto) =>
-    dispatch(updateSeasonOrEpisode(payload));
 
   function resetFilters() {
     if (wasSidebarOpen) openSidebar();
@@ -114,17 +121,29 @@ const ShowsList: FC = () => {
   }
 
   function handleDelete() {
-    dispatch(deleteShows(checkedItemIds));
+    deleteShows(checkedItemIds);
     dispatch(resetChecked());
   }
 
   return (
     <>
       <Container
-        className={clsx(
-          classes.root,
-          isSidebarOpen ? classes.root_sidebarOpen : ''
-        )}
+        sx={({
+          spacing,
+          dimensions: { sidebarWidth },
+          transitions: { create, duration, easing },
+        }) => ({
+          my: '50px',
+          transition: create('padding', {
+            duration: duration.short,
+            easing: easing.easeOut,
+          }),
+          '&.MuiContainer-root': {
+            pl: isSidebarOpen
+              ? (sidebarWidth as number) + parseInt(spacing(3)) + 'px'
+              : 3,
+          },
+        })}
       >
         <TableContainer component={Paper}>
           <ShowsListToolbar
@@ -139,13 +158,13 @@ const ShowsList: FC = () => {
           <Table>
             <ShowsListHead
               numSelected={numChecked}
-              rowsCount={shows.length}
+              rowsCount={shows ? shows.length : 0}
               handleCheckAll={handleCheckAll}
             />
 
             <TableBody>
-              {filteredShows &&
-                filteredShows.map((show, i) => (
+              {shows &&
+                shows.map((show, i) => (
                   <ShowsListItem
                     i={i}
                     key={show.id}
@@ -153,13 +172,13 @@ const ShowsList: FC = () => {
                     isChecked={selectedShows[i] || false}
                     handleClick={handleShowClick}
                     handleCheck={handleItemCheck}
-                    handleIncDec={handleIncDec}
+                    updateSeasonOrEpisode={updateShowField}
                   />
                 ))}
             </TableBody>
           </Table>
 
-          {filteredShows.length === 0 && (
+          {(!shows || shows.length === 0) && (
             <EmptyListMessage
               isAnyFilterActive={isAnyFilterActive}
               handleClick={handleCreateNewShowClick}
@@ -168,10 +187,18 @@ const ShowsList: FC = () => {
         </TableContainer>
       </Container>
 
+      {/*
+       TODO: When many Shows and scrollbar appears, FAB will stay in position when scrolling down and it looks stupid.
+        Either make FAB stick or make showslist scroll inside the component instead of whole page. 
+      */}
       <Fab
-        className={classes.fab}
         onClick={handleCreateNewShowClick}
         color='secondary'
+        sx={{
+          position: 'absolute',
+          right: '2%',
+          bottom: '5vh',
+        }}
       >
         <AddIcon />
       </Fab>

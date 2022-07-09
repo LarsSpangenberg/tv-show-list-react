@@ -1,31 +1,51 @@
 import { FC } from 'react';
-import { AppBar, Toolbar, Box, Typography } from '@material-ui/core';
+import { AppBar, Toolbar, Box, Typography, useTheme } from '@mui/material';
 import BrandingImage from 'assets/logo.svg';
 
-import useStyles from './HeaderStyles';
-
- const Header: FC = () => {
-  const classes = useStyles();
+const Header: FC = () => {
+  const {
+    dimensions: { headerHeight, sidebarWidth },
+    spacing,
+  } = useTheme();
 
   return (
     <AppBar position='static'>
-      <Toolbar className={classes.toolbar}>
-        <Box className={classes.brandingContainer} zIndex={1250}>
+      <Toolbar
+        sx={{
+          paddingLeft: 0,
+          height: headerHeight,
+        }}
+      >
+        <Box
+          position={'absolute'}
+          top={0}
+          left={0}
+          zIndex={1250}
+          sx={{
+            padding: '20px',
+            height: headerHeight,
+            width: sidebarWidth,
+          }}
+        >
           <img src={BrandingImage} alt='branding' />
         </Box>
 
-        <Box className={classes.titleContainer}>
+        <Box
+          sx={{
+            marginLeft: `${(sidebarWidth as number) + parseInt(spacing(2))}px`,
+          }}
+        >
           <Typography component='h1' variant='h4'>
             Watch List
           </Typography>
 
-          <Typography className={classes.subtitle} component='h2' variant='h6'>
+          <Typography component='h2' variant='h6' mt={1} ml={4}>
             Keep Track of Your Favorite Shows
           </Typography>
         </Box>
       </Toolbar>
     </AppBar>
   );
-}
+};
 
 export default Header;

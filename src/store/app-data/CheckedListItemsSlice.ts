@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Show } from 'store/user-data/ShowDetailsSlice';
+import { Show } from 'store/models/Show';
+
 
 interface CheckedListItemsState {
   checked: boolean[];

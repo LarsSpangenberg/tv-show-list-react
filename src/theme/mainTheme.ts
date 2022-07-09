@@ -1,7 +1,9 @@
-import { createMuiTheme } from '@material-ui/core';
+import { createTheme } from '@mui/material/styles';
 import { CSSProperties } from 'react';
 
-const mainTheme = createMuiTheme({
+const defaultTheme = createTheme();
+
+const mainTheme = createTheme({
   palette: {
     primary: {
       main: '#2ce198',
@@ -18,12 +20,28 @@ const mainTheme = createMuiTheme({
   shape: {
     borderRadius: 8,
   },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        '*::-webkit-scrollbar': {
+          width: '8px',
+        },
+        '*::-webkit-scrollbar-thumb': {
+          backgroundColor: defaultTheme.palette.grey[300],
+        },
+        ul: {
+          listStyleType: 'none',
+          paddingInlineStart: 0,
+        },
+      },
+    },
+  },
 });
 
 export default mainTheme;
 
 // Custom Property types
-declare module '@material-ui/core/styles/createMuiTheme' {
+declare module '@mui/material/styles' {
   interface Theme {
     dimensions: {
       headerHeight: CSSProperties['height'];

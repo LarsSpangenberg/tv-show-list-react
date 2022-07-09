@@ -1,17 +1,9 @@
 import { FC, MouseEvent } from 'react';
-import {
-  Toolbar,
-  Box,
-  Typography,
-  Tooltip,
-  IconButton,
-} from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
-import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
-import FilterIcon from '@material-ui/icons/FilterList';
-import ResetFiltersIcon from '@material-ui/icons/ClearAll';
-
-import useStyles from './ShowsListToolbarStyles';
+import { Toolbar, Box, Typography, Tooltip, IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
+import FilterIcon from '@mui/icons-material/FilterList';
+import ResetFiltersIcon from '@mui/icons-material/ClearAll';
 
 interface ShowsListToolbarProps {
   numSelected: number;
@@ -30,10 +22,8 @@ const ShowsListToolbar: FC<ShowsListToolbarProps> = ({
   handleFilterClick,
   resetFilters,
 }) => {
-  const classes = useStyles();
-
   return (
-    <Toolbar className={classes.toolbar}>
+    <Toolbar sx={{ bgcolor: 'primary.main' }}>
       <Box flexGrow={1}>
         <Typography variant='h6'>All Shows</Typography>
       </Box>
@@ -53,7 +43,7 @@ const ShowsListToolbar: FC<ShowsListToolbarProps> = ({
           </IconButton>
         </Tooltip>
       )}
-      
+
       {!isSidebarOpen && (
         <Tooltip title='Filter Menu'>
           <IconButton onClick={handleFilterClick}>

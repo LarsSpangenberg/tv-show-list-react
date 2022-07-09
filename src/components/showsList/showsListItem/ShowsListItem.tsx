@@ -1,12 +1,11 @@
 import { FC, ChangeEvent } from 'react';
-import { TableRow, TableCell, Checkbox } from '@material-ui/core';
+import { TableRow, TableCell, Checkbox } from '@mui/material';
 import NumberTableCell from './NumberTableCell';
 
-import { Show, ShowAndFocusfield } from 'store/user-data/ShowDetailsSlice';
+import { ShowAndFocusfield } from 'store/app-data/ShowDetailsSlice';
 import { CheckedItem } from 'store/app-data/CheckedListItemsSlice';
-import { IncDecDto } from 'store/user-data/ShowsSlice';
-
-import useStyles from './ShowsListItemStyles';
+import { UpdateShowFieldDTO } from 'store/api';
+import { Show } from 'store/models/Show';
 
 interface ShowsListItemProps {
   i: number;
@@ -14,7 +13,7 @@ interface ShowsListItemProps {
   isChecked: boolean;
   handleClick: (payload: ShowAndFocusfield) => void;
   handleCheck: (payload: CheckedItem) => void;
-  handleIncDec: (payload: IncDecDto) => void;
+  updateSeasonOrEpisode: (payload: UpdateShowFieldDTO) => void;
 }
 
 const ShowsListItem: FC<ShowsListItemProps> = ({
@@ -24,16 +23,15 @@ const ShowsListItem: FC<ShowsListItemProps> = ({
   isChecked,
   handleClick,
   handleCheck,
-  handleIncDec,
+  updateSeasonOrEpisode,
 }) => {
-  const classes = useStyles();
 
   function handleShowClick(name: string) {
     handleClick({ show, focusField: name });
   }
 
-  function handleIncDecClick(field: keyof Show, isIncrementing: boolean) {
-    handleIncDec({ id, field, isIncrementing });
+  function submitIncDecValue(field: 'season' | 'episode', updatedValue: number) {
+    updateSeasonOrEpisode({ id, field, updatedValue });
   }
 
   function handleCheckClick(e: ChangeEvent<HTMLInputElement>) {
@@ -61,7 +59,14 @@ const ShowsListItem: FC<ShowsListItemProps> = ({
   }
 
   return (
-    <TableRow key={id} className={classes.root}>
+    <TableRow
+      key={id}
+      sx={{
+        '&:hover': {
+          cursor: 'pointer',
+        },
+      }}
+    >
       <TableCell padding='checkbox'>
         <Checkbox
           checked={isChecked}
@@ -75,23 +80,19 @@ const ShowsListItem: FC<ShowsListItemProps> = ({
       </TableCell>
 
       <NumberTableCell
-        name='season'
+        value={season}
         onClick={handleShowClick.bind(null, 'season')}
-        handleIncDec={handleIncDecClick}
-      >
-        {season}
-      </NumberTableCell>
+        updateValue={submitIncDecValue.bind(null, 'season')}
+      />
 
       <NumberTableCell
-        name='episode'
+        value={episode}
         onClick={handleShowClick.bind(null, 'episode')}
-        handleIncDec={handleIncDecClick}
-      >
-        {episode}
-      </NumberTableCell>
+        updateValue={submitIncDecValue.bind(null, 'episode')}
+      />
 
       <TableCell onClick={handleShowClick.bind(null, 'status')} align='center'>
-        {status /* {getFormattedStatus()} */}
+        {status}
       </TableCell>
 
       <TableCell onClick={handleShowClick.bind(null, 'tags')} align='center'>

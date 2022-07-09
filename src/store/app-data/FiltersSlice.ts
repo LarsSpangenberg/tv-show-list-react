@@ -1,17 +1,17 @@
+import { selectAllTags } from './../api';
 import { RootState } from '../store';
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import Status from 'constants/ShowStatus';
-
-import { showsState } from 'store/user-data/ShowsSlice';
+import Status from 'store/models/ShowStatus';
+import { Tag } from 'store/models/Tag';
 
 interface FiltersState {
   status: Status;
-  tags: string[];
+  selectedTagIds: string[];
 }
 
 const initialState: FiltersState = {
   status: Status.NO_VALUE,
-  tags: [],
+  selectedTagIds: [],
 };
 
 export const filtersSlice = createSlice({
@@ -22,14 +22,15 @@ export const filtersSlice = createSlice({
       state.status = action.payload;
     },
     addTagFilter(state, action: PayloadAction<string>) {
-      state.tags.push(action.payload);
+      if (!state.selectedTagIds.includes(action.payload)) {
+        state.selectedTagIds.push(action.payload);
+      }
     },
     removeTagFilter(state, action: PayloadAction<string>) {
-      if (state.tags) {
-        return {
-          ...state,
-          tags: state.tags.filter((tag) => tag !== action.payload),
-        };
+      if (state.selectedTagIds.length > 0) {
+        state.selectedTagIds = state.selectedTagIds.filter(
+          (id) => id !== action.payload
+        );
       }
     },
     resetAllFilters() {
@@ -48,32 +49,41 @@ export const {
 export default filtersSlice.reducer;
 
 // Selectors
-const filterState = (state: RootState) => state.filters;
+export const filterState = (state: RootState) => state.filters;
 
-export const getFilteredShows = createSelector(
-  [showsState, filterState],
-  (shows, filters) => {
-    const { status: statusFilter, tags: tagFilter } = filters;
+interface TagFiltersDTO {
+  active: Tag[];
+  inactive: Tag[];
+}
 
-    return shows.filter((show) => {
-      let matchesStatusFilter = true;
-      let matchesTagFilter = true;
+export const getTagFilters = createSelector(
+  filterState,
+  selectAllTags,
+  (state, tags): TagFiltersDTO => {
+    const selectedTagIds = [...state.selectedTagIds];
+    const tagFilters = {
+      active: [],
+      inactive: [],
+    } as TagFiltersDTO;
 
-      if (statusFilter) {
-        matchesStatusFilter = statusFilter === show.status;
+    if (!tags || !Array.isArray(tags) || tags.length === 0) return tagFilters;
+    if (selectedTagIds.length === 0) return { ...tagFilters, inactive: tags };
+
+    tagFilters.inactive = [...tags];
+    tagFilters.active = selectedTagIds.map((id) => {
+      const tagIndex = tagFilters.inactive.findIndex((tag) => id === tag.id);
+
+      if (tagIndex > -1) {
+        return tagFilters.inactive.splice(tagIndex, 1)[0];
       }
+    }) as Tag[];
 
-      if (tagFilter.length > 0) {
-        matchesTagFilter = show.tags.some((tag) => tagFilter.includes(tag));
-      }
-
-      return matchesStatusFilter && matchesTagFilter;
-    });
+    return tagFilters;
   }
 );
 
 export const getIsAnyFilterActive = createSelector(filterState, (filters) => {
   const isStatusActive = filters.status !== '';
-  const isTagsActive = filters.tags.length > 0;
+  const isTagsActive = filters.selectedTagIds.length > 0;
   return isStatusActive || isTagsActive;
 });

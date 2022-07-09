@@ -1,36 +1,59 @@
-import { FC, MouseEventHandler } from 'react';
-import { TableCell, Box, IconButton } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import RemoveIcon from '@material-ui/icons/Remove';
+import { FC, MouseEventHandler, useCallback, useState } from 'react';
+import { TableCell, Box, IconButton, debounce } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
-import { Show } from 'store/user-data/ShowDetailsSlice';
-
-import useStyles from './NumberTableCellStyles';
+const buttonStyles = {
+  opacity: 0,
+  transition: 'opacity .3s ease-in-out',
+};
 
 interface NumberTableCellProps {
-  name: string;
+  value: number;
   onClick: MouseEventHandler<HTMLElement>;
-  handleIncDec: (name: keyof Show, isIncrementing: boolean) => void;
+  updateValue: (value: number) => void;
 }
 
 const NumberTableCell: FC<NumberTableCellProps> = ({
-  name,
-  handleIncDec,
-  children,
+  value: val,
+  updateValue,
   ...attributes
 }) => {
-  const classes = useStyles();
+  const [value, setValue] = useState(val);
+
+  const debouncedUpdateValue = useCallback(
+    debounce((newValue) => {
+      updateValue(newValue);
+    }, 1000),
+    []
+  );
 
   function handleIncDecClick(
     isIncrementing: boolean,
     e: React.MouseEvent<HTMLElement>
   ) {
     e.stopPropagation();
-    handleIncDec(name as keyof Show, isIncrementing);
+    let newValue;
+
+    if (isIncrementing) {
+      debouncedUpdateValue.clear();
+      newValue = value + 1;
+      setValue(newValue);
+      debouncedUpdateValue(newValue);
+    } else if (!isIncrementing && value > 1) {
+      debouncedUpdateValue.clear();
+      newValue = value - 1;
+      setValue(newValue);
+      debouncedUpdateValue(newValue);
+    }
   }
 
   return (
-    <TableCell className={classes.root} align='center' {...attributes}>
+    <TableCell
+      align='center'
+      sx={{ '&:hover button': { opacity: 1 } }}
+      {...attributes}
+    >
       <Box
         width={100}
         display='inline-flex'
@@ -38,17 +61,17 @@ const NumberTableCell: FC<NumberTableCellProps> = ({
         alignItems='center'
       >
         <IconButton
-          className={classes.button}
           onClick={handleIncDecClick.bind(this, false)}
           size='small'
+          sx={buttonStyles}
         >
           <RemoveIcon fontSize='small' />
         </IconButton>
 
-        {children}
+        {value}
 
         <IconButton
-          className={classes.button}
+          sx={buttonStyles}
           onClick={handleIncDecClick.bind(this, true)}
           size='small'
         >

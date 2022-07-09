@@ -1,4 +1,4 @@
-import { FC, ChangeEvent } from 'react';
+import { FC, ChangeEvent, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 
 import {
@@ -8,29 +8,36 @@ import {
   TextField,
   MenuItem,
   Button,
-} from '@material-ui/core';
+  useTheme,
+} from '@mui/material';
 
-import useStyles from './SidebarStyles';
-import TagFilters from './tagFilters/TagFilters';
-import Status, { getEqualStatusValue } from 'constants/ShowStatus';
+import TagFilters from './TagFilters';
+import Status, { getEqualStatusValue } from 'store/models/ShowStatus';
 
-import { createTag } from 'store/user-data/TagsSlice';
+// import { createTag } from 'store/user-data/TagsSlice';
 import * as filterActions from 'store/app-data/FiltersSlice';
 import * as uiActions from 'store/app-data/UiSlice';
+import { useAddTagMutation, useGetAllTagsQuery } from 'store/api';
+import { Tag } from 'store/models/Tag';
+
+const inputSpacing = { pl: 1 };
 
 const Sidebar: FC = () => {
-  const classes = useStyles();
   const dispatch = useAppDispatch();
+  const {
+    dimensions: { headerHeight, sidebarWidth },
+  } = useTheme();
 
-  const tags = useAppSelector((state) => state.tags);
+  const { data: tags, isSuccess: getTagsSuccess } = useGetAllTagsQuery();
+  const [createNewTag, { isSuccess: newTagIsSuccess, data: newTagData }] =
+    useAddTagMutation();
+
   const isSidebarOpen = useAppSelector((state) => state.ui.isSidebarOpen);
   const activeStatusFilter = useAppSelector((state) => state.filters.status);
-  const activeTagFilters = useAppSelector((state) => state.filters.tags);
   const isAnyFilterActive = useAppSelector((state) =>
     filterActions.getIsAnyFilterActive(state)
   );
 
-  const createNewTag = (tag: string) => dispatch(createTag(tag));
   const resetFilters = () => dispatch(filterActions.resetAllFilters());
 
   function closeSidebar() {
@@ -55,6 +62,12 @@ const Sidebar: FC = () => {
     );
   }
 
+  useEffect(() => {
+    if(newTagIsSuccess && newTagData) {
+      addTagFilter((newTagData as Tag).id)
+    }
+  }, [newTagIsSuccess, newTagData]);
+
   return (
     <ClickAwayListener
       onClickAway={closeSidebar}
@@ -62,27 +75,33 @@ const Sidebar: FC = () => {
       touchEvent='onTouchEnd'
     >
       <Drawer
-        classes={{ paper: classes.sidebar }}
         open={isSidebarOpen}
         variant='persistent'
         anchor='left'
+        sx={{
+          '& .MuiDrawer-paper': {
+            maxWidth: sidebarWidth,
+            overflow: 'visible',
+          },
+        }}
       >
-        <div className={classes.logoBg} />
-
         <Box
-          className={classes.sidebarContent}
-          display='flex'
-          flexDirection='column'
-          flex='1'
-          pt={2}
-        >
+          sx={{
+            bgcolor: 'secondary.light',
+            minHeight: headerHeight,
+            minWidth: sidebarWidth,
+          }}
+        />
+
+        <Box height={0} display='flex' flexDirection='column' flex='1' pt={2}>
           <TextField
             select
             label='Filter by Status'
             value={activeStatusFilter}
             onChange={setStatusFilter}
-            InputLabelProps={{ className: classes.inputSpacing }}
-            inputProps={{ className: classes.inputSpacing }}
+            InputLabelProps={{ sx: inputSpacing }}
+            inputProps={{ sx: inputSpacing }}
+            variant='standard'
             fullWidth
           >
             <MenuItem value={Status.NO_VALUE}>No Filter</MenuItem>
@@ -94,22 +113,30 @@ const Sidebar: FC = () => {
           </TextField>
 
           <TagFilters
-            tags={tags}
-            activeTagFilters={activeTagFilters}
+            tags={getTagsSuccess ? tags : []}
+            // activeTagFilters={activeTagFilters}
+            // inactiveTagFilters={inactiveTagFilters}
             createNewTag={createNewTag}
             addTagFilter={addTagFilter}
             removeTagFilter={removeTagFilter}
-            inputSpacingClass={classes.inputSpacing}
+            inputSpacing={inputSpacing}
             isSidebarOpen={isSidebarOpen}
             setIgnoreSidebarClose={setIgnoreSidebarClose}
           />
 
           {isAnyFilterActive && (
             <Button
-              className={classes.clearButton}
               onClick={resetFilters}
               size='small'
               fullWidth
+              sx={({ palette: { grey } }) => ({
+                color: grey[500],
+                borderTop: '2px solid',
+                borderColor: grey[300],
+                borderRadius: 0,
+                pt: 1,
+                pb: 1,
+              })}
             >
               Reset All Filters
             </Button>

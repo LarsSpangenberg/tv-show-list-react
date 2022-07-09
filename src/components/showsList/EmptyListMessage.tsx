@@ -1,7 +1,5 @@
 import { FC } from 'react';
-import { Box, Typography } from '@material-ui/core';
-
-import useStyles from './EmptyListMessageStyles';
+import { Box, Typography } from '@mui/material';
 
 interface EmptyListMessageProps {
   isAnyFilterActive: boolean;
@@ -12,17 +10,16 @@ const EmptyListMessage: FC<EmptyListMessageProps> = ({
   isAnyFilterActive,
   handleClick,
 }) => {
-  const classes = useStyles();
 
   return (
     <Box
-      className={classes.root}
       onClick={handleClick}
       display='flex'
       justifyContent='center'
       pt={4}
       px={8}
       pb={6}
+      sx={{ cursor: 'pointer' }}
     >
       <Box maxWidth={700} textAlign='center'>
         {isAnyFilterActive ? (
@@ -35,7 +32,7 @@ const EmptyListMessage: FC<EmptyListMessageProps> = ({
         ) : (
           <Typography component='p' variant='h6'>
             You haven't made any entries in your list. You can add a new show by
-            clicking here or the (+) button on the bottom right corner of your
+            clicking here or by clicking the (+) button on the bottom right corner of your
             screen.
           </Typography>
         )}

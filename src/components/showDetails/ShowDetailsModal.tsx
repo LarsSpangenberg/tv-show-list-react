@@ -1,4 +1,4 @@
-import { FC, forwardRef, Ref } from 'react';
+import { FC, forwardRef, Ref, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import {
   Dialog,
@@ -6,27 +6,33 @@ import {
   DialogActions,
   Typography,
   IconButton,
-  Slide,
+  // Slide,
   Button,
-} from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
+  Box,
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 import ShowDetailsForm from './showDetailsForm/ShowDetailsForm';
-import useStyles from './ShowDetailsModalStyles';
 
-import { TransitionProps } from '@material-ui/core/transitions';
+// import { TransitionProps } from '@mui/material/transitions';
 
-import * as actions from 'store/user-data/ShowsSlice';
+// import * as actions from 'store/user-data/ShowsSlice';
 import {
   updateSelection,
-  resetSelection,
+  resetSelection as resetShowDetailsForm,
   DetailsFormInputValue,
-} from 'store/user-data/ShowDetailsSlice';
-import { createTag } from 'store/user-data/TagsSlice';
+} from 'store/app-data/ShowDetailsSlice';
+import {
+  useAddShowMutation,
+  useAddTagMutation,
+  useDeleteShowsMutation,
+  useGetAllTagsQuery,
+  useUpdateShowMutation,
+} from 'store/api';
 
-const Transition = forwardRef((props: TransitionProps, ref: Ref<unknown>) => (
-  <Slide ref={ref} {...props} />
-));
+// const Transition = forwardRef((props: TransitionProps, ref: Ref<unknown>) => (
+//   <Slide ref={ref} {...props} />
+// ));
 
 interface ShowDetailsModalProps {
   open: boolean;
@@ -34,72 +40,103 @@ interface ShowDetailsModalProps {
 }
 
 const ShowDetailsModal: FC<ShowDetailsModalProps> = ({ open, handleClose }) => {
-  const classes = useStyles();
   const dispatch = useAppDispatch();
 
   const { show, isNew, focusField } = useAppSelector(
     (state) => state.showDetails
   );
-  const allTags = useAppSelector((state) => state.tags);
 
-  const saveNewShow = () => dispatch(actions.addShow(show));
-  const updateShow = () => dispatch(actions.updateShow(show));
-  const deleteShow = () => dispatch(actions.deleteShow(show.id));
-  const handleReset = () => dispatch(resetSelection());
-  const createNewTag = (tag: string) => dispatch(createTag(tag));
+  // TODO: add Error handling
+  const { data: allTags } = useGetAllTagsQuery();
+  const [saveNewShow] = useAddShowMutation();
+  const [updateShow] = useUpdateShowMutation();
+  const [deleteShow] = useDeleteShowsMutation();
+  const [createNewTag, { isSuccess: newTagIsSuccess, data: newTagData }] =
+    useAddTagMutation();
 
-  function handleDetailChange(key: string, value: DetailsFormInputValue) {
-    dispatch(updateSelection({ key, value }));
-  }
+  const handleReset = () => dispatch(resetShowDetailsForm());
 
   function closeModal() {
     handleClose();
     handleReset();
   }
 
+  function handleDetailChange(key: string, value: DetailsFormInputValue) {
+    dispatch(updateSelection({ key, value }));
+  }
+
+  function handleTagChange(newTagIds: string[]) {
+    handleDetailChange('tags', newTagIds);
+  }
+
   function handleSave() {
-    if (isNew) saveNewShow();
-    else updateShow();
+    if (isNew) {
+      saveNewShow(show);
+    } else if ('id' in show) {
+      updateShow(show);
+    } else {
+      console.log(
+        "Show was not updated, probably because it doesn't have an ID property."
+      );
+    }
     closeModal();
   }
 
   function handleDelete() {
-    if (!isNew) deleteShow();
+    if (!isNew && 'id' in show) {
+      deleteShow(show.id);
+    }
     closeModal();
   }
 
+  // TODO: Very slow. Maybe just create the whole tag with id clientside and update without waiting on server
+  // once new global tag is created, add it to the show's tags in ShowDetailsSlice
+  useEffect(() => {
+    if (newTagIsSuccess && newTagData) {
+      handleTagChange([...show.tags, newTagData.id]);
+    }
+  }, [newTagIsSuccess, newTagData]);
+
   return (
     <Dialog
-      className={classes.root}
       open={open}
       onClose={closeModal}
-      TransitionComponent={Transition}
+      // TransitionComponent={Transition}
       maxWidth='sm'
       fullWidth
+      sx={{ overflow: 'hidden' }}
     >
-      <DialogTitle disableTypography className={classes.dialogTitle}>
-        <Typography variant='h6'>{isNew ? 'New' : 'Edit'} Show</Typography>
+      <DialogTitle
+        component='div'
+        display='flex'
+        justifyContent='space-between'
+        sx={{
+          bgcolor: 'primary.main',
+          py: 1,
+          pr: 1,
+        }}
+      >
+        <Typography variant='h6' my='auto'>
+          {isNew ? 'New' : 'Edit'} Show
+        </Typography>
 
-        <IconButton
-          className={classes.closeButton}
-          onClick={handleClose}
-          aria-label='close'
-        >
+        <Box component={IconButton} onClick={handleClose} aria-label='close'>
           <CloseIcon />
-        </IconButton>
+        </Box>
       </DialogTitle>
 
       <ShowDetailsForm
         showDetails={show}
-        allTags={allTags}
+        allTags={allTags ?? []}
         focusField={focusField}
         handleChange={handleDetailChange}
+        handleTagChange={handleTagChange}
         createNewTag={createNewTag}
       />
 
       <DialogActions>
         {!isNew && (
-          <Button className={classes.deleteButton} onClick={handleDelete}>
+          <Button color='error' onClick={handleDelete}>
             Delete
           </Button>
         )}

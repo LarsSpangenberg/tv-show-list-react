@@ -1,30 +1,36 @@
 import { FC, useRef, useEffect, ChangeEvent, MutableRefObject } from 'react';
-import { Grid, DialogContent, TextField, MenuItem } from '@material-ui/core';
+import {
+  Grid,
+  DialogContent,
+  TextField,
+  MenuItem,
+  lighten,
+  Box,
+} from '@mui/material';
 
 import TagInput from './TagInput';
 
-import Status from 'constants/ShowStatus';
-import { Show, DetailsFormInputValue } from 'store/user-data/ShowDetailsSlice';
-
-import useStyles from './ShowDetailsFormStyles';
+import Status from 'store/models/ShowStatus';
+import { DetailsFormInputValue, ShowDetailsData } from 'store/app-data/ShowDetailsSlice';
+import { Tag } from 'store/models/Tag';
 
 interface ShowDetailsFormProps {
-  showDetails: Show;
-  allTags: string[];
+  allTags: Tag[];
+  showDetails: ShowDetailsData;
   focusField: string;
   handleChange: (name: string, value: DetailsFormInputValue) => void;
+  handleTagChange: (newTagIds: string[]) => void;
   createNewTag: (tag: string) => void;
 }
 
 const ShowDetailsForm: FC<ShowDetailsFormProps> = ({
-  showDetails: { title, status, season, episode, note, tags },
+  showDetails: { title, status, season, episode, note },
   allTags,
   focusField,
   handleChange,
+  handleTagChange,
   createNewTag,
 }) => {
-  const classes = useStyles();
-
   const titleInput = useRef<HTMLInputElement>();
   const statusInput = useRef<HTMLInputElement>();
   const seasonInput = useRef<HTMLInputElement>();
@@ -69,13 +75,16 @@ const ShowDetailsForm: FC<ShowDetailsFormProps> = ({
     handleChange(name, value);
   }
 
-  function handleTagChange(updatedTags: string[]) {
-    handleChange('tags', updatedTags);
-  }
-
   return (
     <form noValidate autoComplete='off'>
-      <DialogContent className={classes.contentTop}>
+      <Box
+        component={DialogContent}
+        pb={2}
+        sx={({ palette }) => ({
+          backgroundColor: lighten(palette.secondary.light, 0.4),
+          overflowY: 'hidden',
+        })}
+      >
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <TextField
@@ -85,6 +94,7 @@ const ShowDetailsForm: FC<ShowDetailsFormProps> = ({
               value={title}
               onChange={handleInputChange}
               inputRef={titleInput}
+              variant='standard'
               fullWidth
             />
           </Grid>
@@ -98,6 +108,7 @@ const ShowDetailsForm: FC<ShowDetailsFormProps> = ({
               value={status}
               onChange={handleInputChange}
               inputRef={statusInput}
+              variant='standard'
               fullWidth
             >
               <MenuItem value={Status.CURRENT}>Currently Watching</MenuItem>
@@ -108,9 +119,9 @@ const ShowDetailsForm: FC<ShowDetailsFormProps> = ({
             </TextField>
           </Grid>
         </Grid>
-      </DialogContent>
+      </Box>
 
-      <DialogContent className={classes.contentBottom}>
+      <Box component={DialogContent} height={225} pt={2} pr={2}>
         <Grid container spacing={3}>
           <Grid item xs={6}>
             <TextField
@@ -121,7 +132,6 @@ const ShowDetailsForm: FC<ShowDetailsFormProps> = ({
               value={season}
               onChange={handleInputChange}
               inputRef={seasonInput}
-              variant='outlined'
               fullWidth
               inputProps={{ min: 0 }}
             />
@@ -136,7 +146,6 @@ const ShowDetailsForm: FC<ShowDetailsFormProps> = ({
               value={episode}
               onChange={handleInputChange}
               inputRef={episodeInput}
-              variant='outlined'
               fullWidth
               inputProps={{ min: 0 }}
             />
@@ -150,7 +159,6 @@ const ShowDetailsForm: FC<ShowDetailsFormProps> = ({
               value={note}
               onChange={handleInputChange}
               inputRef={noteInput}
-              variant='outlined'
               fullWidth
               multiline
               rows={4}
@@ -160,14 +168,13 @@ const ShowDetailsForm: FC<ShowDetailsFormProps> = ({
           <Grid item xs={12}>
             <TagInput
               allTags={allTags}
-              showTags={tags}
               handleChange={handleTagChange}
               createNewTag={createNewTag}
               inputRef={tagInput}
             />
           </Grid>
         </Grid>
-      </DialogContent>
+      </Box>
     </form>
   );
 };

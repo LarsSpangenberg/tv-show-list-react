@@ -1,9 +1,7 @@
 import { FC } from 'react';
-import { TableHead, TableRow, TableCell, Checkbox } from '@material-ui/core';
-import CheckBoxIcon from '@material-ui/icons/CheckBoxOutlined';
-import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
-
-import useStyles from './ShowsListHeadStyles';
+import { TableHead, TableRow, TableCell, Checkbox } from '@mui/material';
+import CheckBoxIcon from '@mui/icons-material/CheckBoxOutlined';
+import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBoxOutlined';
 
 interface ShowsListHeadProps {
   numSelected: number;
@@ -16,21 +14,24 @@ const ShowsListHead: FC<ShowsListHeadProps> = ({
   rowsCount,
   handleCheckAll,
 }) => {
-  const classes = useStyles();
-
   const isAllSelected = rowsCount > 0 && numSelected === rowsCount;
   const isAnySelected = numSelected > 0 && numSelected < rowsCount;
 
   return (
     <TableHead>
-      <TableRow className={classes.headerRow}>
+      <TableRow
+        sx={{
+          bgcolor: 'primary.dark',
+          '& th': { color: 'common.white' },
+        }}
+      >
         <TableCell padding='checkbox'>
           <Checkbox
-            className={classes.checkboxIcon}
+            sx={{ color: 'secondary.light' }}
             indeterminate={isAnySelected}
             checked={isAllSelected}
             onClick={handleCheckAll}
-            checkedIcon={<CheckBoxIcon className={classes.checkboxIcon} />}
+            checkedIcon={<CheckBoxIcon sx={{ color: 'secondary.light' }} />}
             indeterminateIcon={<IndeterminateCheckBoxIcon />}
           />
         </TableCell>
@@ -44,6 +45,6 @@ const ShowsListHead: FC<ShowsListHeadProps> = ({
       </TableRow>
     </TableHead>
   );
-}
+};
 
 export default ShowsListHead;
